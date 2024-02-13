@@ -1,131 +1,117 @@
 import React from 'react';
-
 import {
 	CButton,
 	CCard,
-	CCardBody,
 	CCardHeader,
 	CCol,
 	CForm,
-	CFormCheck,
 	CFormInput,
-	CFormFeedback,
-	CFormLabel,
 	CFormSelect,
-	CFormTextarea,
+	CContainer,
 	CRow,
 } from '@coreui/react';
 
-import { DocsExample } from 'src/components';
+const provinces = [
+	'Alberta',
+	'British Columbia',
+	'Manitoba',
+	'New Brunswick',
+	'Newfoundland and Labrador',
+	'Nova Scotia',
+	'Ontario',
+	'Prince Edward Island',
+	'Quebec',
+	'Saskatchewan',
+];
 
 const UserProfile = () => {
 	return (
-		<CRow>
-			<CCol xs={12}>
-				<CCard className="mb-4">
+		<CContainer>
+			<CRow className="justify-content-center">
+				<CCol xs={8} md={8}></CCol>
+				<CCard>
 					<CCardHeader>
-						<strong>User Profile</strong>
+						<h5>User Profile</h5>
 					</CCardHeader>
-					<CCardBody>
-						<p className="text-medium-emphasis small">
-							Validation styles are available for the following form controls
-							and components:
-						</p>
-						<ul>
-							<li>
-								<code>&lt;CFormInput&gt;</code>s
-							</li>
-							<li>
-								<code>&lt;CFormSelect&gt;</code>s
-							</li>
-							<li>
-								<code>&lt;CFormCheck&gt;</code>s
-							</li>
-						</ul>
-						<DocsExample href="forms/validation#supported-elements">
-							<CForm validated={true}>
-								<div className="mb-3">
-									<CFormLabel
-										htmlFor="validationTextarea"
-										className="form-label"
-									>
-										Textarea
-									</CFormLabel>
-									<CFormTextarea
-										id="validationTextarea"
-										placeholder="Required example textarea"
-										invalid
-										required
-									></CFormTextarea>
-									<CFormFeedback invalid>
-										Please enter a message in the textarea.
-									</CFormFeedback>
-								</div>
-								<CFormCheck
-									className="mb-3"
-									id="validationFormCheck1"
-									label="Check this checkbox"
+					<CForm className="g-3">
+						<CRow>
+							<CCol md={6}>
+								<CFormInput
+									type="text"
+									id="validationDefault01"
+									label="First name"
 									required
 								/>
-								<CFormFeedback invalid>
-									Example invalid feedback text
-								</CFormFeedback>
-
-								<CFormCheck
-									type="radio"
-									name="radio-stacked"
-									id="validationFormCheck2"
-									label="Check this checkbox"
+							</CCol>
+						</CRow>
+						<CRow>
+							<CCol md={6}>
+								<CFormInput
+									type="text"
+									id="validationDefault02"
+									label="Last name"
 									required
 								/>
-
-								<CFormCheck
-									className="mb-3"
-									type="radio"
-									name="radio-stacked"
-									id="validationFormCheck3"
-									label="Or toggle this other radio"
+							</CCol>
+						</CRow>
+						<CRow>
+							<CCol md={6}>
+								<CFormInput
+									type="tel"
+									id="validationDefault03"
+									label="Contact Number"
 									required
 								/>
-								<CFormFeedback invalid>
-									More example invalid feedback text
-								</CFormFeedback>
-
-								<div className="mb-3">
-									<CFormSelect required aria-label="select example">
-										<option>Open this select menu</option>
-										<option value="1">One</option>
-										<option value="2">Two</option>
-										<option value="3">Three</option>
-									</CFormSelect>
-									<CFormFeedback invalid>
-										Example invalid select feedback
-									</CFormFeedback>
-								</div>
-
-								<div className="mb-3">
-									<CFormInput
-										type="file"
-										id="validationTextarea"
-										aria-label="file example"
-										required
-									/>
-									<CFormFeedback invalid>
-										Example invalid form file feedback
-									</CFormFeedback>
-								</div>
-
-								<div className="mb-3">
-									<CButton type="submit" color="primary" disabled>
-										Submit form
-									</CButton>
-								</div>
-							</CForm>
-						</DocsExample>
-					</CCardBody>
+							</CCol>
+						</CRow>
+						<CRow>
+							<CCol md={6}>
+								<CFormInput
+									type="text"
+									id="validationDefault04"
+									label="Address"
+									required
+								/>
+							</CCol>
+						</CRow>
+						<CRow>
+							<CCol md={6}>
+								<CFormSelect
+									id="validationServer04"
+									label="Province"
+									feedback="Please select your province."
+									required
+								>
+									<option value="">Choose...</option>
+									{provinces.map((province, index) => (
+										<option key={index} value={province}>
+											{province}
+										</option>
+									))}
+								</CFormSelect>
+							</CCol>
+						</CRow>
+						<CRow>
+							<CCol md={6}>
+								<CFormInput
+									type="text"
+									id="validationDefault05"
+									label="Zip Code"
+									required
+								/>
+							</CCol>
+						</CRow>
+						<CRow>
+							<CCol md={6}>
+								<CButton color="primary" type="submit">
+									Submit
+								</CButton>
+							</CCol>
+						</CRow>
+					</CForm>
 				</CCard>
-			</CCol>
-		</CRow>
+			</CRow>
+		</CContainer>
 	);
 };
 
