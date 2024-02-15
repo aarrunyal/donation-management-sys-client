@@ -11,8 +11,12 @@ export default class AuthService extends Config{
 
     async login(data) {
         let url  =  `${this.apiUrl}/authenticate`
-        console.log("url is " +url)
         return await axios.post(url, data)
+    }
+
+    async logout(data){
+        let url  =  `${this.apiUrl}/logout`
+        return await axios.get(url)
     }
 
     register(data) {

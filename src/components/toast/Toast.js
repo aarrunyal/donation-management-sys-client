@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Toasts = (props) => {
 
 
-    const showToast = ((message, type) => {
+    const showToast = ((message, type="error") => {
         let emitter = {
             position: "bottom-right",
             autoClose: 5000,
@@ -21,9 +21,9 @@ const Toasts = (props) => {
         }
         let toastId = null;
         switch (type) {
-            
+
             case "error":
-                toastId =  toast.error(message, emitter)
+                toastId = toast.error(message, emitter)
                 break;
             case "loading":
                 toastId = toast.loading(message, emitter)
@@ -36,19 +36,18 @@ const Toasts = (props) => {
                 toastId = toast.success(message, emitter)
                 break;
             case "no_loading":
-                alert("loading disable called")
-                toastId = toast.update(localStorage.getItem("loading"), { render: message, type: "error", isLoading: false, progress: undefined, autoClose:5000 });
+                toastId = toast.update(localStorage.getItem("loading"), { render: message, type: type, isLoading: false, progress: undefined, autoClose: 5000 });
                 setTimeout(() => {
                     localStorage.removeItem("loading")
                 }, 5000);
-                    break;
+                break;
             default:
                 toastId = toast.info(message, emitter)
                 break;
         }
     })
 
- 
+
 
 
     props.childRef.current = {

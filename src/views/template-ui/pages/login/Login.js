@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import {
 	CButton,
@@ -21,24 +22,19 @@ import AuthService from 'src/services/AuthService';
 
 import Toasts from 'src/components/toast/Toast';
 
-
-
-
-
-
 const Login = () => {
 
 	const authService = new AuthService();
 
 	const [validated, setValidated] = useState(false)
 
-	const [validationMessage, setValidationMessage] = useState(null)
+	const navigate = useNavigate()
 
 	const childRef = useRef()
 
 	const [state, setState] = useState({
-		email: null,
-		password: null
+		email: "admin@dms.com",
+		password: "admin@123"
 	})
 
 
@@ -60,6 +56,8 @@ const Login = () => {
 			childRef.current.showToast("Login in progress", "loading");
 			authService.login(state).then(response=>{
 				childRef.current.showToast("User logged in successfull !!!", "no_loading")
+				localStorage.setItem("token", response.data.token)
+				navigate('/dashboard');
 			}).catch(error=>{
 				console.log(error)
 				const {message} =error.response.data
@@ -75,17 +73,14 @@ const Login = () => {
 		}))
 	}
 
-	useEffect(() => console.log("State changed :", validated), [validated])
-
-
 	return (
 		<div className="bg-light min-vh-100 d-flex flex-row align-items-center">
 			<CContainer>
 				<CRow className="justify-content-center">
 					<CCol md={8}>
-						<pre>
+						{/* <pre>
 							{JSON.stringify(state)}
-						</pre>
+						</pre> */}
 						<CCardGroup>
 							<CCard className="p-4">
 								<CCardBody>
