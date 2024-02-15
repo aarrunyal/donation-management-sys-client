@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	CButton,
@@ -17,25 +17,55 @@ import {
 import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilUser } from '@coreui/icons';
 
+import AuthService from 'src/services/AuthService';
+
+import Toasts from 'src/components/toast/Toast';
+
+
+
 
 
 
 const Login = () => {
 
+	const authService = new AuthService();
+
 	const [validated, setValidated] = useState(false)
+
+	const [validationMessage, setValidationMessage] = useState(null)
+
+	const childRef = useRef()
 
 	const [state, setState] = useState({
 		email: null,
 		password: null
 	})
 
-	const handleSubmit = (event) => {
+
+
+	const validateForm = ((event) => {
 		const form = event.currentTarget
 		if (form.checkValidity() === false) {
-			event.preventDefault();
 			event.stopPropagation();
+			childRef.current.showToast("Please provide the valid data", "warning");
+			childRef.current.showToast("Fields cannot be empty", "warning");
+		} 
+		setValidated(true);
+		return true
+	})
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		if (validateForm(event) && state.email && state.password) {
+			childRef.current.showToast("Login in progress", "loading");
+			authService.login(state).then(response=>{
+				childRef.current.showToast("User logged in successfull !!!", "no_loading")
+			}).catch(error=>{
+				console.log(error)
+				const {message} =error.response.data
+				childRef.current.showToast(message,"no_loading")
+			})
 		}
-		setValidated(true)
 	}
 
 	const handleChange = (event) => {
@@ -45,7 +75,7 @@ const Login = () => {
 		}))
 	}
 
-
+	useEffect(() => console.log("State changed :", validated), [validated])
 
 
 	return (
@@ -146,6 +176,7 @@ const Login = () => {
 						</CCardGroup>
 					</CCol>
 				</CRow>
+				<Toasts childRef={childRef}/>
 			</CContainer>
 		</div>
 	);
