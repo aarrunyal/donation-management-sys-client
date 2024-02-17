@@ -19,8 +19,9 @@ export default class AuthService extends Config{
         return await axios.get(url)
     }
 
-    register(data) {
-        return axios.post(`${this.apiUrl}`, data)
+   async register(data) {
+        let url  =  `${this.apiUrl}/register`
+        return await axios.post(url, data)
 
     }
 }

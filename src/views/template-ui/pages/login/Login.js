@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import {
@@ -21,6 +21,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons';
 import AuthService from 'src/services/AuthService';
 
 import Toasts from 'src/components/toast/Toast';
+import { isLoggedIn } from 'src/helpers/IsLoggedIn';
 
 const Login = () => {
 
@@ -37,6 +38,11 @@ const Login = () => {
 		password: "admin@123"
 	})
 
+	const naviageIfNotLoggedIn = () => {
+		return isLoggedIn() ? navigate("/dashboard") : null
+	}
+
+
 
 
 	const validateForm = ((event) => {
@@ -44,7 +50,7 @@ const Login = () => {
 		if (form.checkValidity() === false) {
 			event.stopPropagation();
 			childRef.current.showToast("Please provide the valid data", "warning");
-			childRef.current.showToast("Fields cannot be empty", "warning");
+			childRef.current.showToast("Fields cannot be empty", "error");
 		} 
 		setValidated(true);
 		return true
@@ -73,14 +79,18 @@ const Login = () => {
 		}))
 	}
 
+	useEffect(() => {
+		naviageIfNotLoggedIn();
+	}, [])
+
+
+
 	return (
 		<div className="bg-light min-vh-100 d-flex flex-row align-items-center">
 			<CContainer>
 				<CRow className="justify-content-center">
 					<CCol md={8}>
-						{/* <pre>
-							{JSON.stringify(state)}
-						</pre> */}
+					
 						<CCardGroup>
 							<CCard className="p-4">
 								<CCardBody>

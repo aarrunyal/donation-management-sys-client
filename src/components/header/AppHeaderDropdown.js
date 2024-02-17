@@ -29,6 +29,7 @@ const AppHeaderDropdown = () => {
 		event.preventDefault()
 		childRef.current.showToast("User is logging out", "loading")
 		authService.logout().then(response => {
+			localStorage.removeItem("token")
 			childRef.current.showToast("User logged out successfully !!!", "success")
 			setTimeout(() => {
 				navigate("/login")
