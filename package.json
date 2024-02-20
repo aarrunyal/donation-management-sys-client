@@ -21,7 +21,7 @@
 		"test:debug": "react-scripts --inspect-brk test --runInBand",
 		"prepare": "husky install",
 		"lint": "eslint . --fix --max-warnings=0",
-		"format": "prettier . --write"
+        "format": "prettier . --write"
 	},
 	"dependencies": {
 		"@coreui/chartjs": "^3.1.2",
