@@ -45,8 +45,8 @@ const Login = () => {
 		const form = event.currentTarget;
 		if (form.checkValidity() === false) {
 			event.stopPropagation();
-			childRef.current.showToast('Please provide the valid data', 'warning');
-			childRef.current.showToast('Fields cannot be empty', 'error');
+			childRef.current.showToast('warning', 'Please provide the valid data');
+			childRef.current.showToast('error', 'Fields cannot be empty');
 		}
 		setValidated(true);
 		return true;
@@ -55,13 +55,13 @@ const Login = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		if (validateForm(event) && state.email && state.password) {
-			childRef.current.showToast('Login in progress', 'loading');
+			childRef.current.showToast('loading', 'Login in progress');
 			authService
 				.login(state)
 				.then((response) => {
 					childRef.current.showToast(
-						'User logged in successfully !!!',
-						'no_loading'
+						'no_loading',
+						'User logged in successfully !!!'
 					);
 					localStorage.setItem('token', response.data.token);
 					setTimeout(() => {
@@ -71,7 +71,7 @@ const Login = () => {
 				.catch((error) => {
 					console.log(error);
 					const { message } = error.response.data;
-					childRef.current.showToast(message, 'no_loading');
+					childRef.current.showToast('no_loading', message);
 				});
 		}
 	};

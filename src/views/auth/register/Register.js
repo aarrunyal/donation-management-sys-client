@@ -97,14 +97,14 @@ const Register = () => {
 	const handleSubmit = (event) => {
 		validateForm(event).then((res) => {
 			if (res === 0) {
-				childRef.current.showToast('User signup in progress', 'loading');
+				childRef.current.showToast('loading', 'User signup in progress');
 				authService
 					.register(state)
 					.then((response) => {
-						childRef.current.showToast(null, 'no_loading');
+						childRef.current.showToast('no_loading');
 						childRef.current.showToast(
-							'User created successfully !!!',
-							'no_loading'
+							'no_loading',
+							'User created successfully !!!'
 						);
 						setTimeout(() => {
 							navigate('/');
@@ -112,8 +112,8 @@ const Register = () => {
 					})
 					.catch((error) => {
 						const { message } = error.response.data;
-						childRef.current.showToast(null, 'no_loading');
-						childRef.current.showToast(message, 'error');
+						childRef.current.showToast('no_loading');
+						childRef.current.showToast('error', message);
 					});
 			} else {
 				showValiationMessage();

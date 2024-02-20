@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
 	CCard,
 	CCardBody,
@@ -12,8 +12,25 @@ import {
 	CTableHeaderCell,
 	CTableRow,
 } from '@coreui/react';
+import { UserService } from 'src/services/UserService';
+import Toasts from 'src/components/toast/Toast';
 
 const Users = () => {
+	const userService = new UserService();
+
+	const childRef = useRef();
+
+	const getUsers = () => {
+		userService
+			.all()
+			.then((response) => {})
+			.catch((error) => {
+				childRef.current.showToast('Something went wrong !', 'error');
+			});
+	};
+
+	useEffect(() => {}, []);
+
 	return (
 		<CRow>
 			<CCol xs={12}>
@@ -54,6 +71,7 @@ const Users = () => {
 					</CCardBody>
 				</CCard>
 			</CCol>
+			<Toasts childRef="childRef" />
 		</CRow>
 	);
 };
