@@ -62,7 +62,7 @@
 		"npm": ">=6"
 	},
 	"lint-staged": {
-		"*.js": "npm run lint",
-		"*.{js,css,md,html,json}": "npm run format"
-	}
+        "*.js": "eslint --fix ",
+        "*.{js,css,md,html,json}": "prettier --cache --write"
+    }
 }
