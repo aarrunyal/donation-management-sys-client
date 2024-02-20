@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
 	CButton,
@@ -13,7 +13,7 @@ import {
 	CInputGroup,
 	CInputGroupText,
 	CRow,
-	CFormFeedback
+	CFormFeedback,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilUser } from '@coreui/icons';
@@ -24,76 +24,74 @@ import Toasts from 'src/components/toast/Toast';
 import { isLoggedIn } from 'src/helpers/IsLoggedIn';
 
 const Login = () => {
-
 	const authService = new AuthService();
 
-	const [validated, setValidated] = useState(false)
+	const [validated, setValidated] = useState(false);
 
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
-
-	const childRef = useRef()
+	const childRef = useRef();
 
 	const [state, setState] = useState({
-		email: "admin@dms.com",
-		password: "admin@123"
-	})
+		email: 'admin@dms.com',
+		password: 'admin@123',
+	});
 
 	const naviageIfNotLoggedIn = () => {
-		return isLoggedIn() ? navigate("/dashboard") : null
-	}
+		return isLoggedIn() ? navigate('/dashboard') : null;
+	};
 
-
-
-
-	const validateForm = ((event) => {
-		const form = event.currentTarget
+	const validateForm = (event) => {
+		const form = event.currentTarget;
 		if (form.checkValidity() === false) {
 			event.stopPropagation();
-			childRef.current.showToast("Please provide the valid data", "warning");
-			childRef.current.showToast("Fields cannot be empty", "error");
-		} 
+			childRef.current.showToast('Please provide the valid data', 'warning');
+			childRef.current.showToast('Fields cannot be empty', 'error');
+		}
 		setValidated(true);
-		return true
-	})
+		return true;
+	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		if (validateForm(event) && state.email && state.password) {
-			childRef.current.showToast("Login in progress", "loading");
-			authService.login(state).then(response=>{
-				childRef.current.showToast("User logged in successfully !!!", "no_loading")
-				localStorage.setItem("token", response.data.token)
-				setTimeout(() => {
-					navigate('/dashboard');
-				}, 2000);
-			}).catch(error=>{
-				console.log(error)
-				const {message} =error.response.data
-				childRef.current.showToast(message,"no_loading")
-			})
+			childRef.current.showToast('Login in progress', 'loading');
+			authService
+				.login(state)
+				.then((response) => {
+					childRef.current.showToast(
+						'User logged in successfully !!!',
+						'no_loading'
+					);
+					localStorage.setItem('token', response.data.token);
+					setTimeout(() => {
+						navigate('/dashboard');
+					}, 2000);
+				})
+				.catch((error) => {
+					console.log(error);
+					const { message } = error.response.data;
+					childRef.current.showToast(message, 'no_loading');
+				});
 		}
-	}
+	};
 
 	const handleChange = (event) => {
 		setState((prevState) => ({
 			...prevState,
-			[event.target.name]: event.target.value
-		}))
-	}
+			[event.target.name]: event.target.value,
+		}));
+	};
 
 	useEffect(() => {
 		naviageIfNotLoggedIn();
-	}, [])
-
-
+	}, []);
 
 	return (
 		<div className="bg-light min-vh-100 d-flex flex-row align-items-center">
 			<CContainer>
 				<CRow className="justify-content-center">
 					<CCol md={8}>
-					
 						<CCardGroup>
 							<CCard className="p-4">
 								<CCardBody>
@@ -119,9 +117,7 @@ const Login = () => {
 												name="email"
 												required
 											/>
-											<CFormFeedback invalid>
-												Email is required
-											</CFormFeedback>
+											<CFormFeedback invalid>Email is required</CFormFeedback>
 										</CInputGroup>
 
 										<CInputGroup className="mb-4">
@@ -145,7 +141,7 @@ const Login = () => {
 
 										<CRow>
 											<CCol xs={6}>
-												<CButton color="primary" className="px-4" type='submit'>
+												<CButton color="primary" className="px-4" type="submit">
 													Login
 												</CButton>
 											</CCol>
@@ -165,9 +161,7 @@ const Login = () => {
 								<CCardBody className="text-center">
 									<div>
 										<h2>Sign up</h2>
-										<p>
-
-										</p>
+										<p></p>
 										<Link to="/register">
 											<CButton
 												color="primary"
@@ -184,7 +178,7 @@ const Login = () => {
 						</CCardGroup>
 					</CCol>
 				</CRow>
-				<Toasts childRef={childRef}/>
+				<Toasts childRef={childRef} />
 			</CContainer>
 		</div>
 	);
