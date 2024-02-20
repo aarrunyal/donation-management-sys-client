@@ -31,6 +31,7 @@ const Login = () => {
 
 	const navigate = useNavigate()
 
+
 	const childRef = useRef()
 
 	const [state, setState] = useState({
@@ -61,9 +62,11 @@ const Login = () => {
 		if (validateForm(event) && state.email && state.password) {
 			childRef.current.showToast("Login in progress", "loading");
 			authService.login(state).then(response=>{
-				childRef.current.showToast("User logged in successfull !!!", "no_loading")
+				childRef.current.showToast("User logged in successfully !!!", "no_loading")
 				localStorage.setItem("token", response.data.token)
-				navigate('/dashboard');
+				setTimeout(() => {
+					navigate('/dashboard');
+				}, 2000);
 			}).catch(error=>{
 				console.log(error)
 				const {message} =error.response.data

@@ -105,7 +105,7 @@ const Register = () => {
 	const handleSubmit = (event) => {
 		validateForm(event)
 		if (errorCount === 0) {
-			childRef.current.showToast("Login in progress", "loading");
+			childRef.current.showToast("User signup in progress", "loading");
 			authService.register(state).then(response => {
 				childRef.current.showToast(null, "no_loading")
 				childRef.current.showToast("User created successfully !!!", "no_loading")
@@ -129,9 +129,9 @@ const Register = () => {
 					<CCol md={9} lg={7} xl={6}>
 						<CCard className="mx-4">
 							<CCardBody className="p-4">
-								<pre>
+								{/* <pre>
 									{JSON.stringify(state)}
-								</pre>
+								</pre> */}
 								<CForm
 
 									onSubmit={handleSubmit}
