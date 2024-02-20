@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	CCard,
 	CCardBody,
@@ -20,16 +20,23 @@ const Users = () => {
 
 	const childRef = useRef();
 
+	const [users, setUsers] = useState([]);
+
 	const getUsers = () => {
 		userService
 			.all()
-			.then((response) => {})
+			.then((response) => {
+				setUsers(response.data);
+				console.log(users);
+			})
 			.catch((error) => {
-				childRef.current.showToast('Something went wrong !', 'error');
+				childRef.current.showToast('error');
 			});
 	};
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+		getUsers();
+	}, []);
 
 	return (
 		<CRow>
@@ -49,29 +56,37 @@ const Users = () => {
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
-								<CTableRow>
-									<CTableHeaderCell scope="row">1</CTableHeaderCell>
-									<CTableDataCell>Mark</CTableDataCell>
-									<CTableDataCell>Otto</CTableDataCell>
-									<CTableDataCell>@mdo</CTableDataCell>
-								</CTableRow>
-								<CTableRow>
-									<CTableHeaderCell scope="row">2</CTableHeaderCell>
-									<CTableDataCell>Jacob</CTableDataCell>
-									<CTableDataCell>Thornton</CTableDataCell>
-									<CTableDataCell>@fat</CTableDataCell>
-								</CTableRow>
-								<CTableRow>
-									<CTableHeaderCell scope="row">3</CTableHeaderCell>
-									<CTableDataCell colSpan="2">Larry the Bird</CTableDataCell>
-									<CTableDataCell>@twitter</CTableDataCell>
-								</CTableRow>
+								{users.map((user, index) => {
+									return (
+										// <span key={index}>
+										//     <pre>{user}</pre>
+										// </span>
+										<CTableRow key={user.id}>
+											<CTableHeaderCell scope="row">
+												{index + 1}
+											</CTableHeaderCell>
+											<CTableDataCell>{`${user.first_name} ${user.last_name}`}</CTableDataCell>
+											<CTableDataCell>{user.email}</CTableDataCell>
+											<CTableDataCell>
+												<span className="badge badge-secondary">
+													{user.role}
+												</span>
+											</CTableDataCell>
+										</CTableRow>
+									);
+								})}
+
+								{/* <CTableRow>
+                                    <CTableHeaderCell scope="row">3</CTableHeaderCell>
+                                    <CTableDataCell colSpan="2">Larry the Bird</CTableDataCell>
+                                    <CTableDataCell>@twitter</CTableDataCell>
+                                </CTableRow> */}
 							</CTableBody>
 						</CTable>
 					</CCardBody>
 				</CCard>
 			</CCol>
-			<Toasts childRef="childRef" />
+			<Toasts childRef={childRef} />
 		</CRow>
 	);
 };

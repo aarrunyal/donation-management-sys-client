@@ -4,11 +4,11 @@ import { HttpUrlConfigService } from './HttpUrlConfigService';
 export class UserService extends HttpUrlConfigService {
 	constructor() {
 		super();
-		this.apiUrl = `${this.apiUrl}user`;
+		this.apiUrl = `${this.apiUrl}` + 'admin/user';
 	}
 
 	async all() {
-		return await axios.get(this.apiUrl);
+		return await axios.get(this.apiUrl, this.header);
 	}
 
 	async get(id) {

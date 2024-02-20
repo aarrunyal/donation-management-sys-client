@@ -9,7 +9,7 @@ const Toasts = (props) => {
 	const SUCCESS_MESSAGE = 'Request has been processed !!!';
 	const WARNING_MESSAGE = 'Issue with request !!!';
 
-	const showToast = (type = 'error', message = null) => {
+	const showToast = (type, message = null) => {
 		let emitter = {
 			position: 'bottom-right',
 			autoClose: 5000,
@@ -24,6 +24,7 @@ const Toasts = (props) => {
 		switch (type) {
 			case 'error':
 				message = message ? message : ERROR_MESSAGE;
+				console.log(message);
 				toastId = toast.error(message, emitter);
 				break;
 			case 'loading':

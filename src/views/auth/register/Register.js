@@ -45,8 +45,8 @@ const Register = () => {
 	};
 
 	const showValiationMessage = (event) => {
-		childRef.current.showToast('Please provide thes valid data', 'warning');
-		childRef.current.showToast('Fields cannot be empty', 'error');
+		childRef.current.showToast('warning', 'Please provide thes valid data');
+		childRef.current.showToast('error', 'Fields cannot be empty');
 	};
 
 	const validateForm = async (event) => {
@@ -101,6 +101,7 @@ const Register = () => {
 				authService
 					.register(state)
 					.then((response) => {
+						console.log(response);
 						childRef.current.showToast('no_loading');
 						childRef.current.showToast(
 							'no_loading',
@@ -112,7 +113,6 @@ const Register = () => {
 					})
 					.catch((error) => {
 						const { message } = error.response.data;
-						childRef.current.showToast('no_loading');
 						childRef.current.showToast('error', message);
 					});
 			} else {
