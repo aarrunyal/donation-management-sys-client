@@ -68,9 +68,7 @@ const Users = () => {
 											<CTableDataCell>{`${user.first_name} ${user.last_name}`}</CTableDataCell>
 											<CTableDataCell>{user.email}</CTableDataCell>
 											<CTableDataCell>
-												<span className="badge badge-secondary">
-													{user.role}
-												</span>
+												<span className="badge">{user.role}</span>
 											</CTableDataCell>
 										</CTableRow>
 									);

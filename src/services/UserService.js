@@ -12,18 +12,18 @@ export class UserService extends HttpUrlConfigService {
 	}
 
 	async get(id) {
-		let url = `${this.apiUrl}/authenticate`;
+		let url = `${this.apiUrl}`;
 	}
 
 	async create(data) {
-		let url = `${this.apiUrl}/authenticate`;
+		let url = `${this.apiUrl}`;
 	}
 
 	async update(id, data) {
-		let url = `${this.apiUrl}/authenticate`;
+		let url = `${this.apiUrl}`;
 	}
 
 	async delete(id) {
-		let url = `${this.apiUrl}/authenticate`;
+		let url = `${this.apiUrl}`;
 	}
 }
