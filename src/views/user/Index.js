@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+	CBadge,
+	CButton,
 	CCard,
 	CCardBody,
 	CCardHeader,
 	CCol,
+	CModal,
+	CModalBody,
+	CModalHeader,
 	CRow,
 	CTable,
 	CTableBody,
@@ -11,9 +16,19 @@ import {
 	CTableHead,
 	CTableHeaderCell,
 	CTableRow,
+	CModalFooter,
 } from '@coreui/react';
 import { UserService } from 'src/services/UserService';
 import Toasts from 'src/components/toast/Toast';
+import CIcon from '@coreui/icons-react';
+import {
+	cilAlignCenter,
+	cilPencil,
+	cilTrash,
+	cilUser,
+	cilUserX,
+	cilVerticalAlignCenter,
+} from '@coreui/icons';
 
 const Users = () => {
 	const userService = new UserService();
@@ -22,14 +37,52 @@ const Users = () => {
 
 	const [users, setUsers] = useState([]);
 
+	const [modal, setModal] = useState(false);
+
+	const [, forceUpdate] = useState();
+
+	const openModal = () => setModal(true);
+
+	const closeModal = () => setModal(false);
+
 	const getUsers = () => {
 		userService
 			.all()
 			.then((response) => {
 				setUsers(response.data);
-				console.log(users);
 			})
 			.catch((error) => {
+				childRef.current.showToast('error');
+			});
+	};
+
+	const badgeColor = (color) => {
+		color = color.toLowerCase();
+		let badge = 'info';
+		switch (color) {
+			case 'admin':
+				badge = 'info';
+				break;
+			case 'organiser':
+				badge = 'warning';
+				break;
+			case 'user':
+				badge = 'success';
+				break;
+			default:
+				badge = 'info';
+				break;
+		}
+		return badge;
+	};
+
+	const deleteUser = (id) => {
+		userService
+			.delete(id)
+			.then((res) => {
+				childRef.current.showToast('successs');
+			})
+			.catch((err) => {
 				childRef.current.showToast('error');
 			});
 	};
@@ -43,9 +96,17 @@ const Users = () => {
 			<CCol xs={12}>
 				<CCard className="mb-4">
 					<CCardHeader>
-						<strong>React Table</strong> <small>Table head</small>
+						<strong>User</strong>
 					</CCardHeader>
 					<CCardBody>
+						<CRow>
+							<CCol xs={12}>
+								<CButton color="success">
+									<CIcon size="sm" icon={cilUser} />
+									Add User
+								</CButton>
+							</CCol>
+						</CRow>
 						<CTable>
 							<CTableHead color="dark">
 								<CTableRow>
@@ -53,6 +114,7 @@ const Users = () => {
 									<CTableHeaderCell scope="col">Name</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Email</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Role</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
@@ -68,7 +130,27 @@ const Users = () => {
 											<CTableDataCell>{`${user.first_name} ${user.last_name}`}</CTableDataCell>
 											<CTableDataCell>{user.email}</CTableDataCell>
 											<CTableDataCell>
-												<span className="badge">{user.role}</span>
+												<CBadge
+													color={badgeColor(user.role)}
+													href="https://coreui.io/"
+												>
+													{user.role}
+												</CBadge>
+											</CTableDataCell>
+											<CTableDataCell>
+												<CIcon size="lg" icon={cilPencil} className="m-2" />
+												<CIcon
+													onClick={deleteUser(user.id)}
+													size="lg"
+													icon={cilTrash}
+													className="m-2"
+												/>
+												<CIcon
+													onClick={() => openModal()}
+													size="lg"
+													icon={cilAlignCenter}
+													className="m-2"
+												/>
 											</CTableDataCell>
 										</CTableRow>
 									);
@@ -76,13 +158,20 @@ const Users = () => {
 
 								{/* <CTableRow>
                                     <CTableHeaderCell scope="row">3</CTableHeaderCell>
-                                    <CTableDataCell colSpan="2">Larry the Bird</CTableDataCell>
-                                    <CTableDataCell>@twitter</CTableDataCell>
+                                    <CTableDataCell colSpan="2">Larry the Bird</CTableDataCell>z
+                                    <CTableDataCell>@twitter</CTableDataCell>s
                                 </CTableRow> */}
 							</CTableBody>
 						</CTable>
 					</CCardBody>
 				</CCard>
+				<CModal visible={modal} onClose={closeModal}>
+					<CModalHeader closeButton>Modal title</CModalHeader>
+					<CModalBody>Lorem ipsum dolor...</CModalBody>
+					<CModalFooter>
+						<CButton color="primary">Do Something</CButton>{' '}
+					</CModalFooter>
+				</CModal>
 			</CCol>
 			<Toasts childRef={childRef} />
 		</CRow>
