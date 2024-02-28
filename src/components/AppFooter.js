@@ -17,7 +17,7 @@ const AppFooter = () => {
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					CoreUI React Admin &amp; Dashboard Template
+					
 				</a>
 			</div>
 		</CFooter>

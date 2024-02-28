@@ -32,6 +32,8 @@ const Login = () => {
 
 	const childRef = useRef();
 
+	
+
 	const [state, setState] = useState({
 		email: 'admin@dms.com',
 		password: 'admin@123',
@@ -88,7 +90,7 @@ const Login = () => {
 	}, []);
 
 	return (
-		<div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+		<div className="bg-blue min-vh-100 d-flex flex-row align-items-center">
 			<CContainer>
 				<CRow className="justify-content-center">
 					<CCol md={8}>
@@ -160,8 +162,10 @@ const Login = () => {
 							>
 								<CCardBody className="text-center">
 									<div>
-										<h2>Sign up</h2>
-										<p></p>
+										<h2>Sign up for free </h2>
+										<p>
+											
+										</p>
 										<Link to="/register">
 											<CButton
 												color="primary"

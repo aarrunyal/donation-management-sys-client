@@ -1,1 +1,17 @@
-// Here you can add other styles
+.custom-card {
+    
+    background-color:rgb(213, 224, 255);
+    box-shadow: 0 4px 8px rgba(47, 0, 255, 0.1);
+    border-radius: 10px;
+    padding: 40px;
+    margin-top: 50px;
+   
+
+
+    
+}
+.submit-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; 
+}
