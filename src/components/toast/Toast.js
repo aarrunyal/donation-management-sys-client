@@ -6,19 +6,20 @@ import 'react-toastify/dist/ReactToastify.css';
 const Toasts = (props) => {
 	const ERROR_MESSAGE = 'Something went wrong !!!';
 	const LOADING_MESSAGE = 'Request in progress !!!';
-	const SUCCESS_MESSAGE = 'Request has been processed !!!';
+	const SUCCESS_MESSAGE = 'Request has been processed successfully !!!';
 	const WARNING_MESSAGE = 'Issue with request !!!';
 
 	const showToast = (type, message = null) => {
 		let emitter = {
-			position: 'bottom-right',
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: 'light',
+			// position: 'bottom-right',
+			// autoClose: 5000,
+			// hideProgressBar: false,
+			// closeOnClick: true,
+			// pauseOnHover: true,
+			// draggable: true,
+			// progress: undefined,
+			// theme: 'light',
+			// closeButton: true
 		};
 		let toastId = null;
 		switch (type) {

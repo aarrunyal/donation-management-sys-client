@@ -30,15 +30,15 @@ const AppHeaderDropdown = () => {
 			.then((response) => {
 				localStorage.removeItem('token');
 				childRef.current.showToast(
-					'User logged out successfully !!!',
-					'success'
+					'success',
+					'User logged out successfully !!!'
 				);
 				setTimeout(() => {
-					navigate('/');
+					window.location.href ="/"
 				}, 2000);
 			})
 			.catch((error) => {
-				childRef.current.showToast('Something went wrong', 'error');
+				childRef.current.showToast('error');
 			});
 	};
 

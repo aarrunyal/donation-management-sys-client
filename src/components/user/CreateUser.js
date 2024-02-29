@@ -88,7 +88,6 @@ const CreateUser = ({ modal, user, closeModal }) => {
                     <CModalBody>
 
                         <CRow >
-                            <pre>{JSON.stringify(state)}</pre>
                             <CCol md={12}>
                                 <CFormLabel htmlFor="validationCustom02">First Name</CFormLabel>
                                 <CFormInput

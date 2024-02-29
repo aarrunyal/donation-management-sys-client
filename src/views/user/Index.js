@@ -23,6 +23,8 @@ import Helper from 'src/services/Helper';
 import CreateUser from 'src/components/user/CreateUser';
 import Toasts from 'src/components/toast/Toast';
 import UpdateUser from 'src/components/user/UpdateUser';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const Users = () => {
 	const helper = new Helper();
@@ -75,13 +77,28 @@ const Users = () => {
 
 
 	const deleteUser = ((id) => {
-		userService.delete(id).then(res => {
-			console.log(res)
-			childRef.current.showToast('success', res.data.data);
-			getUsers()
-		}).catch(err => {
-			childRef.current.showToast('error', err.response.data.message);
-		})
+		confirmAlert({
+			title: 'Deleting users detail',
+			message: 'Are you sure?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => {
+						userService.delete(id).then(res => {
+							childRef.current.showToast('success', res.data.data);
+							getUsers()
+						}).catch(err => {
+							childRef.current.showToast('error', err.response.data.message);
+						})
+					}
+				},
+				{
+					label: 'No',
+					onClick: () => getUsers()
+				}
+			]
+		});
+
 	})
 
 	useEffect(() => {
@@ -90,19 +107,21 @@ const Users = () => {
 
 	return (
 		<CRow>
+			<CCol xs={12} className='mb-2 ' >
+				<CButton color="success" onClick={() => openModal("create_user", {})}>
+					<CIcon size='sm' icon={cilUser} />
+					Add User
+				</CButton>
+			</CCol>
 			<CCol xs={12}>
 				<CCard className="mb-4">
+
 					<CCardHeader>
 						<strong>User</strong>
 					</CCardHeader>
 					<CCardBody>
 						<CRow>
-							<CCol xs={12} >
-								<CButton color="success" onClick={() => openModal("create_user", {})}>
-									<CIcon size='sm' icon={cilUser} />
-									Add User
-								</CButton>
-							</CCol>
+
 						</CRow>
 						<CTable>
 							<CTableHead color="dark">
