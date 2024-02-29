@@ -27,7 +27,8 @@ export class UserService extends HttpUrlConfigService {
 	}
 
 	async update(id, data) {
-		let url = `${this.apiUrl}`;
+		let url = `${this.apiUrl}/${id}`;
+		return await axios.put(url, data, this.header);
 	}
 
 	async delete(id) {

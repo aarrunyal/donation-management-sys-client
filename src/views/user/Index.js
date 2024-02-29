@@ -22,6 +22,7 @@ import UserDetails from 'src/components/user/UserDetails';
 import Helper from 'src/services/Helper';
 import CreateUser from 'src/components/user/CreateUser';
 import Toasts from 'src/components/toast/Toast';
+import UpdateUser from 'src/components/user/UpdateUser';
 
 const Users = () => {
 	const helper = new Helper();
@@ -35,24 +36,28 @@ const Users = () => {
 
 	const [createUserModal, setCreateUserModal] = useState(false);
 
+	const [updateUserModal, setUpdateUserModal] = useState(false);
+
 	const [userDetail, setUserDetail] = useState({})
 
 	const openModal = (modalName, user = {}) => {
 		if (modalName === "user_detail") {
 			setUserDetail(user)
 			setUserDetailModal(true);
+		} else if (modalName === "update_user") {
+			setUserDetail(user)
+			setUpdateUserModal(true);
 		}
 		else {
 			setUserDetail({})
 			setCreateUserModal(true);
 		}
-
-
 	}
 
 	const closeModal = (modalName) => {
 		setUserDetailModal(false);
 		setCreateUserModal(false);
+		setUpdateUserModal(false)
 		setUserDetail({})
 		getUsers()
 	}
@@ -132,7 +137,7 @@ const Users = () => {
 													user.role != "ADMIN"
 														?
 														<>
-															<CIcon onClick={() => openModal("create_user", user)} size='lg' icon={cilPencil} className='m-2' />
+															<CIcon onClick={() => openModal("update_user", user)} size='lg' icon={cilPencil} className='m-2' />
 															<CIcon onClick={() => deleteUser(user.id)} size='lg' icon={cilTrash} className='m-2' />
 														</>
 
@@ -158,7 +163,8 @@ const Users = () => {
 			</CCol>
 			<Toasts childRef={childRef} />
 			<UserDetails modal={userDetailmodal} user={userDetail} closeModal={closeModal} />
-			<CreateUser modal={createUserModal} user={userDetail} closeModal={closeModal}></CreateUser>
+			<CreateUser modal={createUserModal} user={userDetail} closeModal={closeModal} />
+			<UpdateUser modal={updateUserModal} user={userDetail} closeModal={closeModal} />
 		</CRow>
 	);
 };

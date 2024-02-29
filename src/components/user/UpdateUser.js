@@ -5,7 +5,7 @@ import ValidationHelper from "src/services/ValidationHelper";
 import Toasts from "../toast/Toast";
 import { UserService } from "src/services/UserService";
 
-const CreateUser = ({ modal, user, closeModal }) => {
+const UpdateUser = ({ modal, user, closeModal }) => {
 
     const userService = new UserService()
 
@@ -13,7 +13,7 @@ const CreateUser = ({ modal, user, closeModal }) => {
 
     const childRef = useRef();
 
-    const [state, setState] = useState()
+    const [state, setState] = useState(user)
 
     const [error, setError] = useState({})
 
@@ -56,21 +56,36 @@ const CreateUser = ({ modal, user, closeModal }) => {
         }));
     };
 
-    const saveUser = () => {
-        userService.create(state).then(response => {
+    useEffect(() => {
+        if (Object.keys(user).length > 0) {
+            console.log(user)
+            setState(user)
+        }
+    }, [user])
+
+
+    const updateUser = () => {
+        userService.update(user.id, state).then(response => {
             childRef.current.showToast('success');
-            setState({})
             closeModal("create_modal")
+            setState({})
         }).catch(error => {
-            childRef.current.showToast('error', 'Something went wrong !!!');
+            console.log(error.response.data)
+            let errMessages = Object.values(error.response.data)
+            if (errMessages.length > 0) {
+                for (let err of errMessages) {
+                    childRef.current.showToast('error', err);
+                }
+            }
+
         })
     }
+
 
     const handleSubmit = (event) => {
         event.preventDefault()
         validateForm(event).then(response => {
-            saveUser();
-
+            updateUser()
         }).catch(error => {
             childRef.current.showToast('error', 'Please provide valid data !!!');
         })
@@ -84,7 +99,7 @@ const CreateUser = ({ modal, user, closeModal }) => {
                 onClose={closeModal}
             >
                 <CForm onSubmit={handleSubmit}>
-                    <CModalHeader closeButton>Create User</CModalHeader>
+                    <CModalHeader closeButton>Update User</CModalHeader>
                     <CModalBody>
 
                         <CRow >
@@ -95,7 +110,7 @@ const CreateUser = ({ modal, user, closeModal }) => {
                                     onChange={handleChange}
                                     type="text"
                                     id="validationCustom02"
-
+                                    value={state.first_name}
                                     name="first_name"
                                 />
                                 {
@@ -113,6 +128,7 @@ const CreateUser = ({ modal, user, closeModal }) => {
                                     onChange={handleChange}
                                     type="text"
                                     id="validationCustom02"
+                                    value={state.last_name}
                                     name="last_name"
                                 />
                                 {
@@ -128,8 +144,10 @@ const CreateUser = ({ modal, user, closeModal }) => {
                                 <CFormInput
                                     onChange={handleChange}
                                     type="email"
+                                    value={state.email}
                                     id="validationCustom02"
                                     name="email"
+                                    readOnly
                                 />
                                 {
                                     error.email == "error" ?
@@ -139,29 +157,10 @@ const CreateUser = ({ modal, user, closeModal }) => {
                                 }
                             </CCol>
                             <br />
-                            <CCol md={12}>
-                                <CFormLabel htmlFor="validationCustom02">Password</CFormLabel>
-                                <CFormInput
-                                    onChange={handleChange}
-                                    type="password"
-                                    id="validationCustom02"
-                                    name="password"
 
-                                />
-                                {
-                                    error.password == "error" ?
-                                        <span className="text-danger">Password is required</span>
-                                        :
-                                        null
-                                }
-                            </CCol>
-
-
-
-                            <br />
                             <CCol md={12}>
                                 <CFormLabel htmlFor="validationCustom02" >Role</CFormLabel>
-                                <CFormSelect id="validationCustom04" onChange={handleChange} name="role">
+                                <CFormSelect id="validationCustom04" value={state.role} onChange={handleChange} name="role">
                                     <option disabled>Choose User Role</option>
                                     <option value={"USER"}>User</option>
                                     <option value={"ORGANISER"}>Organiser</option>
@@ -187,9 +186,9 @@ const CreateUser = ({ modal, user, closeModal }) => {
                         </CButton>
                     </CModalFooter>
                 </CForm>
-            </CModal >
+            </CModal>
             <Toasts childRef={childRef} />
         </>
     );
 }
-export default CreateUser;
+export default UpdateUser;
