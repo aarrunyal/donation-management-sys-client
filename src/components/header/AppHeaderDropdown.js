@@ -20,7 +20,6 @@ const AppHeaderDropdown = () => {
 	const authService = new AuthService();
 
 	const childRef = useRef();
-	const navigate = useNavigate();
 
 	const logout = (event) => {
 		event.preventDefault();
