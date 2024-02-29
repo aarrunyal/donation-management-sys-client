@@ -17,9 +17,11 @@ import { cilLockLocked, cilUser } from '@coreui/icons';
 import Toasts from 'src/components/toast/Toast';
 import AuthService from 'src/services/AuthService';
 import { useNavigate } from 'react-router-dom';
+import Helper from 'src/services/Helper';
 
 const Register = () => {
 	const authService = new AuthService();
+	const helper = new Helper()
 
 	const childRef = useRef();
 
@@ -27,22 +29,10 @@ const Register = () => {
 
 	const navigate = useNavigate();
 
-	const passwordRegex =
-		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,14}$/;
-
-	const emailRegex = /\S+@\S+\.\S+/;
 
 	// const [errorCount, setErrorCount] = useState(1)
 
-	const validatePassword = (password) => {
-		if (password === '') return false;
-		return passwordRegex.test(password);
-	};
 
-	const validateEmail = (email) => {
-		if (email === '') return false;
-		return emailRegex.test(email);
-	};
 
 	const showValiationMessage = (event) => {
 		childRef.current.showToast('warning', 'Please provide thes valid data');
@@ -58,9 +48,9 @@ const Register = () => {
 			for (let f of form) {
 				if (f.name) obj[f.name] = f.value === '' ? 'error' : '';
 				if (f.name === 'email')
-					obj[f.name] = !validateEmail(f.value) ? 'error' : '';
+					obj[f.name] = !helper.validateEmail(f.value) ? 'error' : '';
 				if (f.name === 'password')
-					obj[f.name] = !validatePassword(f.value) ? 'error' : '';
+					obj[f.name] = !helper.validatePassword(f.value) ? 'error' : '';
 				if (f.name === 'confirm_password')
 					obj[f.name] =
 						state.password === state.confirm_password ? '' : 'error';

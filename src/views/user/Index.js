@@ -15,12 +15,13 @@ import {
 	CTableRow,
 } from '@coreui/react';
 import { UserService } from 'src/services/UserService';
-import Toasts from 'src/components/toast/Toast';
+
 import CIcon from '@coreui/icons-react';
 import { cilAlignCenter, cilPencil, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
 import UserDetails from 'src/components/user/UserDetails';
 import Helper from 'src/services/Helper';
 import CreateUser from 'src/components/user/CreateUser';
+import Toasts from 'src/components/toast/Toast';
 
 const Users = () => {
 	const helper = new Helper();
@@ -36,20 +37,24 @@ const Users = () => {
 
 	const [userDetail, setUserDetail] = useState({})
 
-	const [, forceUpdate] = useState()
-
 	const openModal = (modalName, user = {}) => {
-		if (modalName == "user_detail")
+		if (modalName === "user_detail") {
+			setUserDetail(user)
 			setUserDetailModal(true);
-		else
+		}
+		else {
+			setUserDetail({})
 			setCreateUserModal(true);
-		setUserDetail(user)
+		}
+
+
 	}
 
 	const closeModal = (modalName) => {
 		setUserDetailModal(false);
 		setCreateUserModal(false);
 		setUserDetail({})
+		getUsers()
 	}
 
 	const getUsers = () => {
@@ -66,9 +71,11 @@ const Users = () => {
 
 	const deleteUser = ((id) => {
 		userService.delete(id).then(res => {
-			childRef.current.showToast('successs');
+			console.log(res)
+			childRef.current.showToast('success', res.data.data);
+			getUsers()
 		}).catch(err => {
-			childRef.current.showToast('error');
+			childRef.current.showToast('error', err.response.data.message);
 		})
 	})
 
@@ -86,7 +93,7 @@ const Users = () => {
 					<CCardBody>
 						<CRow>
 							<CCol xs={12} >
-								<CButton color="success" onClick={()=>openModal("create_user")}>
+								<CButton color="success" onClick={() => openModal("create_user", {})}>
 									<CIcon size='sm' icon={cilUser} />
 									Add User
 								</CButton>
@@ -120,9 +127,19 @@ const Users = () => {
 												</CBadge>
 											</CTableDataCell>
 											<CTableDataCell>
-												<CIcon size='lg' icon={cilPencil} className='m-2' />
-												<CIcon onClick={deleteUser(user.id)} size='lg' icon={cilTrash} className='m-2' />
-												<CIcon onClick={() => openModal(user, "user_detail")} size='lg' icon={cilAlignCenter} className='m-2' />
+
+												{
+													user.role != "ADMIN"
+														?
+														<>
+															<CIcon onClick={() => openModal("create_user", user)} size='lg' icon={cilPencil} className='m-2' />
+															<CIcon onClick={() => deleteUser(user.id)} size='lg' icon={cilTrash} className='m-2' />
+														</>
+
+														: null
+												}
+												<CIcon onClick={() => openModal("user_detail", user)} size='lg' icon={cilAlignCenter} className='m-2' />
+
 											</CTableDataCell>
 										</CTableRow>
 									);
@@ -142,7 +159,6 @@ const Users = () => {
 			<Toasts childRef={childRef} />
 			<UserDetails modal={userDetailmodal} user={userDetail} closeModal={closeModal} />
 			<CreateUser modal={createUserModal} user={userDetail} closeModal={closeModal}></CreateUser>
-
 		</CRow>
 	);
 };

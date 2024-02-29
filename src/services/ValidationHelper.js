@@ -1,4 +1,4 @@
-export default class Helper {
+export default class validationHelper {
 
     passwordRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,14}$/;
@@ -38,4 +38,10 @@ export default class Helper {
         if (email === '') return false;
         return this.emailRegex.test(email);
     };
+
+    validateEmpty = (value) => {
+        if (value == undefined || value == null || value == "")
+            return false;
+        return true
+    }
 }

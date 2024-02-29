@@ -7,6 +7,13 @@ export class UserService extends HttpUrlConfigService {
 		this.apiUrl = `${this.apiUrl}` + 'admin/user';
 	}
 
+
+	// formData(){
+	// 	let fData = new FormData({
+
+	// 	});
+	// }
+
 	async all() {
 		return await axios.get(this.apiUrl, this.header);
 	}
@@ -16,7 +23,7 @@ export class UserService extends HttpUrlConfigService {
 	}
 
 	async create(data) {
-		let url = `${this.apiUrl}`;
+		return await axios.post(this.apiUrl, data, this.header);
 	}
 
 	async update(id, data) {
@@ -24,6 +31,7 @@ export class UserService extends HttpUrlConfigService {
 	}
 
 	async delete(id) {
-		let url = `${this.apiUrl}`;
+		let url = `${this.apiUrl}/${id}`;
+		return await axios.delete(url, this.header);
 	}
 }

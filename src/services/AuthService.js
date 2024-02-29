@@ -3,6 +3,7 @@ import axios from 'axios';
 import { HttpUrlConfigService } from './HttpUrlConfigService';
 
 export default class AuthService extends HttpUrlConfigService {
+	
 	constructor() {
 		super();
 		this.apiUrl = `${this.apiUrl}auth`;

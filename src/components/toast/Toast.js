@@ -24,7 +24,6 @@ const Toasts = (props) => {
 		switch (type) {
 			case 'error':
 				message = message ? message : ERROR_MESSAGE;
-				console.log(message);
 				toastId = toast.error(message, emitter);
 				break;
 			case 'loading':
