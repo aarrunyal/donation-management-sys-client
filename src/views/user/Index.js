@@ -6,9 +6,6 @@ import {
 	CCardBody,
 	CCardHeader,
 	CCol,
-	CModal,
-	CModalBody,
-	CModalHeader,
 	CRow,
 	CTable,
 	CTableBody,
@@ -16,34 +13,44 @@ import {
 	CTableHead,
 	CTableHeaderCell,
 	CTableRow,
-	CModalFooter,
 } from '@coreui/react';
 import { UserService } from 'src/services/UserService';
 import Toasts from 'src/components/toast/Toast';
 import CIcon from '@coreui/icons-react';
-import {
-	cilAlignCenter,
-	cilPencil,
-	cilTrash,
-	cilUser,
-	cilUserX,
-	cilVerticalAlignCenter,
-} from '@coreui/icons';
+import { cilAlignCenter, cilPencil, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
+import UserDetails from 'src/components/user/UserDetails';
+import Helper from 'src/services/Helper';
+import CreateUser from 'src/components/user/CreateUser';
 
 const Users = () => {
+	const helper = new Helper();
 	const userService = new UserService();
 
 	const childRef = useRef();
 
 	const [users, setUsers] = useState([]);
 
-	const [modal, setModal] = useState(false);
+	const [userDetailmodal, setUserDetailModal] = useState(false);
 
-	const [, forceUpdate] = useState();
+	const [createUserModal, setCreateUserModal] = useState(false);
 
-	const openModal = () => setModal(true);
+	const [userDetail, setUserDetail] = useState({})
 
-	const closeModal = () => setModal(false);
+	const [, forceUpdate] = useState()
+
+	const openModal = (modalName, user = {}) => {
+		if (modalName == "user_detail")
+			setUserDetailModal(true);
+		else
+			setCreateUserModal(true);
+		setUserDetail(user)
+	}
+
+	const closeModal = (modalName) => {
+		setUserDetailModal(false);
+		setCreateUserModal(false);
+		setUserDetail({})
+	}
 
 	const getUsers = () => {
 		userService
@@ -56,36 +63,14 @@ const Users = () => {
 			});
 	};
 
-	const badgeColor = (color) => {
-		color = color.toLowerCase();
-		let badge = 'info';
-		switch (color) {
-			case 'admin':
-				badge = 'info';
-				break;
-			case 'organiser':
-				badge = 'warning';
-				break;
-			case 'user':
-				badge = 'success';
-				break;
-			default:
-				badge = 'info';
-				break;
-		}
-		return badge;
-	};
 
-	const deleteUser = (id) => {
-		userService
-			.delete(id)
-			.then((res) => {
-				childRef.current.showToast('successs');
-			})
-			.catch((err) => {
-				childRef.current.showToast('error');
-			});
-	};
+	const deleteUser = ((id) => {
+		userService.delete(id).then(res => {
+			childRef.current.showToast('successs');
+		}).catch(err => {
+			childRef.current.showToast('error');
+		})
+	})
 
 	useEffect(() => {
 		getUsers();
@@ -100,9 +85,9 @@ const Users = () => {
 					</CCardHeader>
 					<CCardBody>
 						<CRow>
-							<CCol xs={12}>
-								<CButton color="success">
-									<CIcon size="sm" icon={cilUser} />
+							<CCol xs={12} >
+								<CButton color="success" onClick={()=>openModal("create_user")}>
+									<CIcon size='sm' icon={cilUser} />
 									Add User
 								</CButton>
 							</CCol>
@@ -130,27 +115,14 @@ const Users = () => {
 											<CTableDataCell>{`${user.first_name} ${user.last_name}`}</CTableDataCell>
 											<CTableDataCell>{user.email}</CTableDataCell>
 											<CTableDataCell>
-												<CBadge
-													color={badgeColor(user.role)}
-													href="https://coreui.io/"
-												>
+												<CBadge color={helper.badgeColor(user.role)} href="https://coreui.io/">
 													{user.role}
 												</CBadge>
 											</CTableDataCell>
 											<CTableDataCell>
-												<CIcon size="lg" icon={cilPencil} className="m-2" />
-												<CIcon
-													onClick={deleteUser(user.id)}
-													size="lg"
-													icon={cilTrash}
-													className="m-2"
-												/>
-												<CIcon
-													onClick={() => openModal()}
-													size="lg"
-													icon={cilAlignCenter}
-													className="m-2"
-												/>
+												<CIcon size='lg' icon={cilPencil} className='m-2' />
+												<CIcon onClick={deleteUser(user.id)} size='lg' icon={cilTrash} className='m-2' />
+												<CIcon onClick={() => openModal(user, "user_detail")} size='lg' icon={cilAlignCenter} className='m-2' />
 											</CTableDataCell>
 										</CTableRow>
 									);
@@ -165,15 +137,12 @@ const Users = () => {
 						</CTable>
 					</CCardBody>
 				</CCard>
-				<CModal visible={modal} onClose={closeModal}>
-					<CModalHeader closeButton>Modal title</CModalHeader>
-					<CModalBody>Lorem ipsum dolor...</CModalBody>
-					<CModalFooter>
-						<CButton color="primary">Do Something</CButton>{' '}
-					</CModalFooter>
-				</CModal>
+
 			</CCol>
 			<Toasts childRef={childRef} />
+			<UserDetails modal={userDetailmodal} user={userDetail} closeModal={closeModal} />
+			<CreateUser modal={createUserModal} user={userDetail} closeModal={closeModal}></CreateUser>
+
 		</CRow>
 	);
 };
