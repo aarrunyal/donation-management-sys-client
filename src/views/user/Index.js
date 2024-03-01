@@ -17,7 +17,7 @@ import {
 import { UserService } from 'src/services/UserService';
 
 import CIcon from '@coreui/icons-react';
-import { cilAlignCenter, cilPencil, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
+import { cibCircle, cibSamsung, cilAlignCenter, cilCheckAlt, cilCheckCircle, cilCircle, cilPencil, cilPlus, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
 import UserDetails from 'src/components/user/UserDetails';
 import Helper from 'src/services/Helper';
 import CreateUser from 'src/components/user/CreateUser';
@@ -109,7 +109,7 @@ const Users = () => {
 		<CRow>
 			<CCol xs={12} className='mb-2 ' >
 				<CButton color="success" onClick={() => openModal("create_user", {})}>
-					<CIcon size='sm' icon={cilUser} />
+					<CIcon size='sm' className='mx-2' icon={cilPlus} />
 					Add User
 				</CButton>
 			</CCol>
@@ -130,6 +130,7 @@ const Users = () => {
 									<CTableHeaderCell scope="col">Name</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Email</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Role</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
@@ -143,12 +144,28 @@ const Users = () => {
 											<CTableHeaderCell scope="row">
 												{index + 1}
 											</CTableHeaderCell>
-											<CTableDataCell>{`${user.first_name} ${user.last_name}`}</CTableDataCell>
+											<CTableDataCell>
+												{`${user.first_name} ${user.last_name}`}</CTableDataCell>
 											<CTableDataCell>{user.email}</CTableDataCell>
 											<CTableDataCell>
-												<CBadge color={helper.badgeColor(user.role)} href="https://coreui.io/">
+												<CBadge color={helper.badgeColor(user.role)} >
 													{user.role}
 												</CBadge>
+											</CTableDataCell>
+											<CTableDataCell>
+												{
+													user.role != "ADMIN" ?
+														<>
+															<CBadge color={helper.badgeColor(user.status)}>
+																{helper.activeText(user.status)}
+															</CBadge>
+															<br />
+															<CBadge color={helper.badgeColor(user.verified)}>
+																{helper.verifiedText(user.verified)}
+															</CBadge>
+														</>
+														: null
+												}
 											</CTableDataCell>
 											<CTableDataCell>
 

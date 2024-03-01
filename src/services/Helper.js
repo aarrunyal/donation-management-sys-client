@@ -7,19 +7,25 @@ export default class Helper {
 
 
     badgeColor = ((color) => {
-        if (!color)
-            return
-        color = color.toLowerCase();
+        
         let badge = "info"
         switch (color) {
-            case "admin":
+            case "ADMIN":
                 badge = "info"
                 break;
-            case "organiser":
+            case "ORGANISER":
                 badge = "warning"
                 break;
-            case "user":
+            case "USER":
                 badge = "success"
+                break;
+            case true:
+                console.log("bere")
+                badge = "success"
+                break;
+
+            case false:
+                badge = "danger"
                 break;
             default:
                 badge = "info"
@@ -38,4 +44,46 @@ export default class Helper {
         if (email === '') return false;
         return this.emailRegex.test(email);
     };
+
+
+    activeText = (flag)=>{
+        let text = null;
+        switch(flag){
+            case true:
+                text ="ACTIVE"
+                break;
+            case false:
+                text= "INACTIVE"
+                break;
+        }
+        return text;
+    }
+
+
+    verifiedText = (flag)=>{
+        let text = null;
+        switch(flag){
+            case true:
+                text ="VERIFIED"
+                break;
+            case false:
+                text= "NOT-VERIFIED"
+                break;
+        }
+        return text;
+    }
+
+
+    expiredText = (flag)=>{
+        let text = null;
+        switch(flag){
+            case true:
+                text ="VERIFIED"
+                break;
+            case false:
+                text= "NOT-VERIFIED"
+                break;
+        }
+        return text;
+    }
 }
