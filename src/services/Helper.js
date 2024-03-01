@@ -7,7 +7,7 @@ export default class Helper {
 
 
     badgeColor = ((color) => {
-        
+
         let badge = "info"
         switch (color) {
             case "ADMIN":
@@ -20,11 +20,17 @@ export default class Helper {
                 badge = "success"
                 break;
             case true:
-                console.log("bere")
+                badge = "success"
+                break;
+
+            case "not_expired":
                 badge = "success"
                 break;
 
             case false:
+                badge = "danger"
+                break;
+            case "expired":
                 badge = "danger"
                 break;
             default:
@@ -46,44 +52,72 @@ export default class Helper {
     };
 
 
-    activeText = (flag)=>{
+    activeText = (flag) => {
         let text = null;
-        switch(flag){
+        switch (flag) {
             case true:
-                text ="ACTIVE"
+                text = "ACTIVE"
                 break;
             case false:
-                text= "INACTIVE"
+                text = "INACTIVE"
                 break;
         }
         return text;
     }
 
 
-    verifiedText = (flag)=>{
+    verifiedText = (flag) => {
         let text = null;
-        switch(flag){
+        switch (flag) {
             case true:
-                text ="VERIFIED"
+                text = "VERIFIED"
                 break;
             case false:
-                text= "NOT-VERIFIED"
+                text = "NOT-VERIFIED"
                 break;
         }
         return text;
     }
 
 
-    expiredText = (flag)=>{
+    expiredText = (flag) => {
         let text = null;
-        switch(flag){
+        switch (flag) {
             case true:
-                text ="VERIFIED"
+                text = "EXPIRED"
                 break;
             case false:
-                text= "NOT-VERIFIED"
+                text = "NOT-EXPIRED"
                 break;
         }
         return text;
+    }
+
+    generateStatusText = (status, flag) => {
+        switch (status) {
+            case true:
+                if (flag == "expire") {
+                    flag = "not-expired"
+                } else if (flag == "verify") {
+                    flag = "not-verified"
+                } else {
+                    flag = "in-active"
+                }
+                break;
+            case false:
+                if (flag == "expire") {
+                    flag = "expired"
+                } else if (flag == "verify") {
+                    flag = "verified"
+                } else {
+                    flag = "active"
+                }
+                break;
+
+            default:
+                flag = flag
+                break;
+        }
+        return flag;
     }
 }

@@ -6,6 +6,10 @@ import {
 	CCardBody,
 	CCardHeader,
 	CCol,
+	CDropdown,
+	CDropdownItem,
+	CDropdownMenu,
+	CDropdownToggle,
 	CRow,
 	CTable,
 	CTableBody,
@@ -16,12 +20,14 @@ import {
 } from '@coreui/react';
 
 import CIcon from '@coreui/icons-react';
-import { cilAlignCenter, cilPencil, cilPlus, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
+import { cilAlignCenter, cilCheck, cilPencil, cilPlus, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
 import Helper from 'src/services/Helper';
 import Toasts from 'src/components/toast/Toast';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { DonationService } from 'src/services/DonationService';
+import DonationDetail from 'src/components/donation/DonationDetail';
+import { useNavigate } from 'react-router-dom';
 
 const Donation = () => {
 	const helper = new Helper();
@@ -30,6 +36,12 @@ const Donation = () => {
 	const childRef = useRef();
 
 	const [donations, setDonations] = useState([]);
+
+	const [modal, setModal] = useState(false)
+
+	const [donation, setDonation] = useState({})
+
+	const navigate = useNavigate();
 
 
 
@@ -70,6 +82,49 @@ const Donation = () => {
 
 	})
 
+
+	const toggleStatus = ((donation, flag) => {
+
+		if (flag == "active")
+			flag = helper.generateStatusText(donation.status, flag)
+		else if (flag == "verify")
+			flag = helper.generateStatusText(donation.verified, flag)
+		else
+			flag = helper.generateStatusText(donation.expired, flag)
+
+		confirmAlert({
+			title: `Changing status of campaign to ${flag}`,
+			message: 'Are you sure?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => {
+						donationService.toggleStatus(donation.id, flag).then(res => {
+							childRef.current.showToast('success', res.data.data);
+							getDonations()
+						}).catch(err => {
+							childRef.current.showToast('error', err.response.data.message);
+						})
+					}
+				},
+				{
+					label: 'No',
+					onClick: () => getDonations()
+				}
+			]
+		});
+	})
+
+	const toggleModal = (donation) => {
+		if(modal){
+			setModal(false)
+			setDonation({})
+		}else{
+			setModal(true)
+			setDonation(donation)
+		}
+	}
+
 	useEffect(() => {
 		getDonations();
 	}, []);
@@ -77,8 +132,8 @@ const Donation = () => {
 	return (
 		<CRow>
 			<CCol xs={12} className='mb-2 ' >
-				<CButton color="success" >
-					<CIcon size='sm' className='mx-2' icon={cilPlus} />
+				<CButton color="success"  onClick={()=>navigate("/donation-create")}>
+					<CIcon size='sm' className='mx-2' icon={cilPlus}/>
 					Add Donation
 				</CButton>
 			</CCol>
@@ -100,6 +155,7 @@ const Donation = () => {
 									<CTableHeaderCell scope="col">Event Date</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Expected Collection($)</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell scope="col">View</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
@@ -123,12 +179,11 @@ const Donation = () => {
 												</CButton>
 											</CTableDataCell>
 											<CTableDataCell>
-
 												<>
-												<CBadge color={helper.badgeColor(donation.expired)}>
+													<CBadge color={helper.badgeColor(donation.expired ? "expired" : "not_expired")}>
 														{helper.expiredText(donation.expired)}
 													</CBadge>
-													<br/>
+													<br />
 													<CBadge color={helper.badgeColor(donation.status)}>
 														{helper.activeText(donation.status)}
 													</CBadge>
@@ -141,15 +196,30 @@ const Donation = () => {
 
 											</CTableDataCell>
 											<CTableDataCell>
+												<CIcon onClick={() => toggleModal(donation)} size='lg' icon={cilAlignCenter} className='m-2' />
+											</CTableDataCell>
+											<CTableDataCell>
+												<CDropdown>
+													<CDropdownToggle color="light"></CDropdownToggle>
+													<CDropdownMenu>
+														<CDropdownItem onClick={() => toggleStatus(donation, "active")}>
+															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Active
+														</CDropdownItem>
+														<CDropdownItem onClick={() => toggleStatus(donation, "verify")}>
+															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Verified
+														</CDropdownItem>
+														<CDropdownItem onClick={() => toggleStatus(donation, "expire")}>
+															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Expired
+														</CDropdownItem>
 
-
-												<>
-													<CIcon size='lg' icon={cilPencil} className='m-2' />
-													<CIcon onClick={() => deleteDonation(donation.id)} size='lg' icon={cilTrash} className='m-2' />
-												</>
-
-
-												<CIcon size='lg' icon={cilAlignCenter} className='m-2' />
+														<CDropdownItem>
+															<CIcon size='lg' icon={cilPencil} className='mx-2' />Edit
+														</CDropdownItem>
+														<CDropdownItem onClick={() => deleteDonation(donation.id)}>
+															<CIcon size='lg' icon={cilTrash} className='mx-2' /> Delete
+														</CDropdownItem>
+													</CDropdownMenu>
+												</CDropdown>
 
 											</CTableDataCell>
 										</CTableRow>
@@ -167,6 +237,7 @@ const Donation = () => {
 				</CCard>
 
 			</CCol>
+			<DonationDetail modal={modal} donation={donation} toggleModal={toggleModal} />
 			<Toasts childRef={childRef} />
 
 		</CRow>

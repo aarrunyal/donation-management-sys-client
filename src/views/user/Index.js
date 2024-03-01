@@ -6,6 +6,10 @@ import {
 	CCardBody,
 	CCardHeader,
 	CCol,
+	CDropdown,
+	CDropdownItem,
+	CDropdownMenu,
+	CDropdownToggle,
 	CRow,
 	CTable,
 	CTableBody,
@@ -131,6 +135,7 @@ const Users = () => {
 									<CTableHeaderCell scope="col">Email</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Role</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell scope="col">View</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
@@ -168,18 +173,29 @@ const Users = () => {
 												}
 											</CTableDataCell>
 											<CTableDataCell>
-
-												{
-													user.role != "ADMIN"
-														?
-														<>
-															<CIcon onClick={() => openModal("update_user", user)} size='lg' icon={cilPencil} className='m-2' />
-															<CIcon onClick={() => deleteUser(user.id)} size='lg' icon={cilTrash} className='m-2' />
-														</>
-
-														: null
-												}
 												<CIcon onClick={() => openModal("user_detail", user)} size='lg' icon={cilAlignCenter} className='m-2' />
+											</CTableDataCell>
+											<CTableDataCell>
+												<CDropdown>
+													<CDropdownToggle color="light"></CDropdownToggle>
+													<CDropdownMenu>
+														{
+															user.role != "ADMIN"
+																?
+																<>
+																	<CDropdownItem onClick={() => openModal("update_user", user)}>
+																		<CIcon size='lg' icon={cilPencil} className='mx-2' />Edit
+																	</CDropdownItem>
+																	<CDropdownItem onClick={() => deleteUser(user.id)}>
+																		<CIcon size='lg' icon={cilTrash} className='mx-2' /> Delete
+																	</CDropdownItem>
+
+																</>
+																: null
+														}
+													</CDropdownMenu>
+												</CDropdown>
+
 
 											</CTableDataCell>
 										</CTableRow>

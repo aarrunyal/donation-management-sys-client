@@ -28,4 +28,10 @@ export class DonationService extends HttpUrlConfigService {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.delete(url, this.header);
 	}
+
+
+	async toggleStatus(id, flag){
+		let url = `${this.apiUrl}/${id}/${flag}`;
+		return await axios.get(url, this.header);
+	}
 }
