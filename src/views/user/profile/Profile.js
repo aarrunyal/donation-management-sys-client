@@ -28,10 +28,6 @@ const genders = ['Male', 'Female', 'Other'];
 
 const UserProfile = () => {
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        confirmEmail: '',
         contactNumber: '',
         address: '',
         province: '',
@@ -66,64 +62,11 @@ const UserProfile = () => {
         <CContainer>
             <CCard className="custom-card"> 
                 <CCardHeader>
-				<h6 style={{ color: 'darkblue', fontWeight: 'bold' ,fontSize:'40px', textAlign: 'center' }}> User Profile Form </h6> 
+                <h2 className='text-info font-weight-bolder text-lg text-center'>User Profile Form</h2>
                 </CCardHeader>
                 <CForm className="g-3" onSubmit={handleSubmit}>
 				<CRow>
-						<CCol sm={6}>
-                    <div className="mb-3">
-                        <CFormInput
-                            type="text"
-                            name="firstName"
-                            id="validationDefault01"
-                            label="First name"
-                            value={formData.firstName}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
-                    </div>
-					</CCol>
-					<CCol sm={6}>
-                    <div className="mb-3">
-                        <CFormInput
-                            type="text"
-                            name="lastName"
-                            id="validationDefault02"
-                            label="Last name"
-                            value={formData.lastName}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
-                    </div>
-					</CCol>
-					<CCol sm={6}>
-                    <div className="mb-3">
-                        <CFormInput
-                            type="email"
-                            name="email"
-                            id="validationDefault03"
-                            label="Email Address"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        {errors.email && <div className="text-danger">{errors.email}</div>}
-                    </div>
-					</CCol>
-                    <div className="mb-3">
-                        <CFormInput
-                            type="email"
-                            name="confirmEmail"
-                            id="validationDefault04"
-                            label="Confirm Email Address"
-                            value={formData.confirmEmail}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        {errors.confirmEmail && <div className="text-danger">{errors.confirmEmail}</div>}
-                    </div>
+                    <CCol sm={3}>
                     <div className="mb-3">
                         <CFormInput
                             type="tel"
@@ -136,6 +79,8 @@ const UserProfile = () => {
                         />
                         {errors.contactNumber && <div className="text-danger">{errors.contactNumber}</div>}
                     </div>
+                    </CCol>
+                    <CCol sm={6}>
                     <div className="mb-3">
                         <CFormInput
                             type="text"
@@ -148,6 +93,8 @@ const UserProfile = () => {
                         />
                         {errors.address && <div className="text-danger">{errors.address}</div>}
                     </div>
+                    </CCol>
+                    <CCol sm={3}>
                     <div className="mb-3">
                         <CFormSelect
                             name="province"
@@ -167,6 +114,8 @@ const UserProfile = () => {
                         </CFormSelect>
                         {errors.province && <div className="text-danger">{errors.province}</div>}
                     </div>
+                    </CCol>
+                    <CCol sm={3}>
                     <div className="mb-3">
                         <CFormInput
                             type="text"
@@ -179,6 +128,8 @@ const UserProfile = () => {
                         />
                         {errors.zipCode && <div className="text-danger">{errors.zipCode}</div>}
                     </div>
+                    <CRow>
+                    <CCol sm={6}>
                     <div className="mb-3">
                         <CFormInput
                             type="date"
@@ -191,6 +142,8 @@ const UserProfile = () => {
                         />
                         {errors.dob && <div className="text-danger">{errors.dob}</div>}
                     </div>
+                    </CCol>
+                    <CCol sm={6}>
                     <div className="mb-3">
                         <CFormSelect
                             name="gender"
@@ -210,11 +163,15 @@ const UserProfile = () => {
                         </CFormSelect>
                         {errors.gender && <div className="text-danger">{errors.gender}</div>}
                     </div>
+                    </CCol>
+                    </CRow>
+                    <CCol sm={6}></CCol>
                     <div className="mb-3 text-center">
                         <CButton color="primary" type="submit">
                             Submit
                         </CButton>
                     </div>
+                    </CCol>
 					</CRow>
                 </CForm>
             </CCard>
