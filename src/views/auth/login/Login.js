@@ -80,41 +80,26 @@ const Login = () => {
 	};
 
 	return (
-		<div className="p-3 mb-2 bg-warning text-dark bg-opacity-10 min-vh-100 d-flex flex-row align-items-center">
+		<div className="p-3 mb-2 bg-blue text-dark bg-opacity-20 min-vh-100 d-flex flex-row align-items-center"
+		style={{ backgroundColor: 'rgba(255,153,157,0.5)' }}>	
 			<CContainer>
-				<CRow>
-					<CCol md={12}>
-						<CCard className="p-3 mb-2 .bg-primary text-dark  text-blue ">
-							<CCardBody className="text-center">
-								<div>
-									<h2>Sign up for free</h2>
-                                    <p className="font-italic fw-bold custom-font">Create an account and start donating!</p>
-									<Link to="/register">
-										<CButton
-											color="bg-custom-light-white"
-											className="mt-3"
-											active
-											tabIndex={-1}
-										>
-											Register Now!
-										</CButton>
-									</Link>
-								</div>
-							</CCardBody>
-						</CCard>
-					</CCol>
-				</CRow>
-				<CRow className="justify-content-center">
+			<CRow>
+				<CCol md={6}>
+				</CCol>
+			</CRow>
+			<CCard className="p-4 mb-0 shadow" style={{ height: '600px' ,width: "1200px" }}>
+			<CRow className="justify-content-center">
 					<CCol md={6}>
 						<img
-							src="https://www.501c3.org/wp-content/uploads/2021/05/jar-of-money-cash-donations-appreciated-sign-message-board-contributions-tips-collection.jpg"
-							style={{ width: '95%', height: '84%' }}
+							src='https://www.wikiimpact.com/wp-content/uploads/2021/05/donate_getty-1024x818.jpeg'
+							style={{ width: '100%', height: '100%' }}
 							alt="Image"
 						/>
 					</CCol>
+				
 					<CCol md={6}>
 						<CCardGroup>
-							<CCard className="p-4">
+						<CCard className="p-4" style={{ height: '555px', width:'900px'}}>
 								<CCardBody>
 									<CForm
 										noValidate
@@ -163,20 +148,40 @@ const Login = () => {
 										<CRow>
 											<CCol xs={6}>
 												<CButton
-													color="primary"
+													style={{ backgroundColor: 'rgba(251,112,113,255)' ,border: 'none'  }}
 													className="w-100"
 													type="submit"
+													
 												>
 													Login
 												</CButton>
 											</CCol>
 										</CRow>
+
+										<div className="mt-5 d-flex flex-column align-items-center">
+ 										 <p className="font-italic fw-bold custom-font text-center"/> 
+   										<p> <strong><i>Not a member?</i> </strong></p>
+										<p>Create an account for free and Start Donating!</p>
+  										<Link to="/register">
+										
+    									<CButton
+      									style={{ backgroundColor: 'rgba(251,112,113,255)', border: 'none'  }}
+      									className="mt-1 custom-button text-white ,w-100"
+      									active
+      									tabIndex={-1}
+    									>
+      									Register
+    									</CButton>
+  										</Link>
+										</div>
+
 									</CForm>
 								</CCardBody>
 							</CCard>
 						</CCardGroup>
 					</CCol>
 				</CRow>
+				</CCard>
 				<Toasts childRef={childRef} />
 			</CContainer>
 		</div>
