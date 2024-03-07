@@ -20,7 +20,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons';
 import AuthService from 'src/services/AuthService';
 import Toasts from 'src/components/toast/Toast';
 import { isLoggedIn } from 'src/helpers/IsLoggedIn';
-import AppFooter from 'src/components/AppFooter';
+import backgournd from '../../../assets/images/login-background.jpeg';
 
 const Login = () => {
 	const authService = new AuthService();
@@ -91,7 +91,7 @@ const Login = () => {
 			<CRow className="justify-content-center">
 					<CCol md={6}>
 						<img
-							src='https://www.wikiimpact.com/wp-content/uploads/2021/05/donate_getty-1024x818.jpeg'
+							src={backgournd}
 							style={{ width: '100%', height: '100%' }}
 							alt="Image"
 						/>

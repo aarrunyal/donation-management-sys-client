@@ -1,25 +1,158 @@
-import { CButton, CCard, CCardBody, CCardFooter, CCardHeader, CCol, CForm, CFormInput, CFormLabel, CRow } from "@coreui/react";
-import React, { useState } from "react";
+import { CButton, CCard, CCardBody, CCardFooter, CCardHeader, CCol, CForm, CFormInput, CFormLabel, CFormSwitch, CFormTextarea, CRow } from "@coreui/react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ValidationHelper from "src/services/ValidationHelper";
+import Toasts from "src/components/toast/Toast";
+import DonationService from "src/services/DonationService";
+import QuillEditor from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import Helper from "src/services/Helper";
 
 const CreateDonation = () => {
 
+    const validationHelper = new ValidationHelper()
+    const donationService = new DonationService()
+
+    const childRef = useRef()
+
+    const [tommorrow, setTommorrow] = useState()
+
+
     const [error, setError] = useState({})
+
+    const [description, setDescription] = useState(null)
+
+    const [imageUri, setImageUri] = useState(null)
+
+    const [state, setState] = useState({
+
+    })
+
+
+
 
     const navigate = useNavigate();
 
-    const handleChange = (event) => {
+    const validateForm = async (event) => {
 
+        return new Promise((resolve, reject) => {
+            let obj = {}
+            let errorCount = 0;
+            let form = event.currentTarget
+            if (form) {
+                for (let f of form) {
+                    if (f.name != "" && !validationHelper.validateEmpty(f.value)) {
+                        errorCount++
+                        obj[f.name] = "error"
+                    }
+                    if (!description) {
+                        obj["description"] = "error"
+                    }
+                }
+            }
+            setError(obj)
+            if (errorCount <= 0) {
+                resolve(true)
+            } else {
+                reject(false)
+            }
+        })
+
+    };
+
+    const handleChange = (event) => {
+        setState((prevState) => ({
+            ...prevState,
+            [event.target.name]: event.target.value,
+        }));
+    };
+
+    const buildData = () => {
+        let data = {}
+        for (let key in state) {
+            if (state[key] == "on") {
+                data[key] = true
+            } else {
+                data[key] = state[key]
+            }
+        }
+        if (description)
+            data["description"] = description
+        return data;
+    }
+
+    const uploadImage = (donation) => {
+        return new Promise((resolve) => {
+            let fd = new FormData()
+            fd.append("file", imageUri);
+            donationService.uploadImage(donation.id, fd).then(response => {
+                resolve(true)
+            }).catch(error => {
+                childRef.current.showToast("error", "Please provide valid data !!!")
+            }, (reject) => {
+                reject(false)
+            })
+        })
     }
 
     const handleSubmit = (event) => {
-
+        event.preventDefault()
+        validateForm(event).then(response => {
+            donationService.create(buildData()).then(res => {
+                uploadImage(res.data).then(res => {
+                    childRef.current.showToast("success");
+                    navigate("/donation")
+                }).catch(err => {
+                    childRef.current.showToast("error")
+                })
+            })
+            childRef.current.showToast("success", "Validation completed")
+        }).catch(error => {
+            childRef.current.showToast("error", "Please provide valid data !!!")
+        })
     }
+
+    const onFileUpload = (event) => {
+        setImageUri(event.target.files[0])
+    }
+
+    const Editor = () => {
+        return (
+            <div style={{ padding: "2rem 3rem;" }}>
+
+                <QuillEditor
+                    className={{
+                        marginTop: "1rem;",
+                        height: "500px;"
+                    }}
+                    value={description}
+                    onChange={(description) => setDescription(description)}
+                    theme="snow"
+                />
+            </div>
+        );
+    };
+
+    const getDate = () => {
+        const dateObj = new Date();
+
+        // get the month in this format of 04, the same for months
+        const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+        const day = ("0" + parseInt(dateObj.getDate() + 1)).slice(-2);
+        const year = dateObj.getFullYear();
+
+        const shortDate = `${year}-${month}-${day}`;
+        setTommorrow(shortDate)
+    }
+
+    useEffect(() => {
+        getDate()
+    }, [])
 
     return (
         <CRow>
             <CCol xs={12}>
-                <CForm onSubmit={handleSubmit}>
+                <CForm onSubmit={handleSubmit} encType="multipart/form-data">
                     <CCard className="mb-4">
 
                         <CCardHeader>
@@ -28,7 +161,7 @@ const CreateDonation = () => {
                         <CCardBody>
 
                             <CRow>
-                                <CCol md={12}>
+                                <CCol md={8}>
                                     <CFormLabel htmlFor="validationCustom02">Donation / Campaign Name</CFormLabel>
                                     <CFormInput
                                         onChange={handleChange}
@@ -42,6 +175,68 @@ const CreateDonation = () => {
                                             null
                                     }
 
+
+                                    <br />
+
+                                    <CFormLabel htmlFor="validationCustom02">Expected Collection</CFormLabel>
+                                    <CFormInput
+                                        onChange={handleChange}
+                                        type="number"
+                                        name="expected_collection"
+                                    />
+                                    {
+                                        error.expected_collection == "error" ?
+                                            <span className="text-danger">Expected collection is required</span>
+                                            :
+                                            null
+                                    }
+
+
+                                    <br />
+
+                                    <CFormLabel htmlFor="validationCustom02">Event Date</CFormLabel>
+                                    <CFormInput
+                                        onChange={handleChange}
+                                        type="date"
+                                        name="event_date"
+                                        min={tommorrow}
+                                        defaultValue={tommorrow}
+                                    />
+                                    {
+                                        error.event_date == "error" ?
+                                            <span className="text-danger">Event Date is required</span>
+                                            :
+                                            null
+                                    }
+
+                                    <br />
+
+                                    <CFormLabel htmlFor="validationCustom02">Description</CFormLabel>
+                                    {Editor()}
+                                    {
+                                        error.description == "error" ?
+                                            <span className="text-danger">Description is required</span>
+                                            :
+                                            null
+                                    }
+
+                                </CCol>
+
+                                <CCol md={4}>
+                                    <CFormLabel htmlFor="validationCustom02">Image</CFormLabel>
+                                    <CFormInput
+                                        onChange={onFileUpload}
+                                        type="file"
+                                        name="file"
+                                    />
+                                    {
+                                        error.file ?
+                                            <span className="text-danger">Image is required</span>
+                                            :
+                                            null
+                                    }
+                                    <br />
+                                    <CFormSwitch onChange={handleChange} label="Mark as active" name="status" id="formSwitchCheckDefaultNormal" />
                                 </CCol>
 
                             </CRow>
@@ -59,6 +254,8 @@ const CreateDonation = () => {
                     </CCard>
                 </CForm>
             </CCol>
+
+            <Toasts childRef={childRef} />
         </CRow>
     );
 }

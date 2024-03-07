@@ -120,4 +120,20 @@ export default class Helper {
         }
         return flag;
     }
+
+
+    createBolb = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            resolve(event.target.result)
+        };
+        reader.readAsDataURL(file);
+    })
+
+
+    buildImagePath = (image_path, imageName, imageType) => {
+        if (imageType == "thumb")
+            return `${process.env.REACT_APP_API_ENDPOINT}/${image_path}/thumb/${imageName}`
+        return `${process.env.REACT_APP_API_ENDPOINT}/${image_path}/${imageName}`
+    }
 }

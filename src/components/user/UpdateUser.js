@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react"
 import Helper from "src/services/Helper";
 import ValidationHelper from "src/services/ValidationHelper";
 import Toasts from "../toast/Toast";
-import { UserService } from "src/services/UserService";
+import UserService  from "src/services/UserService";
 
 const UpdateUser = ({ modal, user, closeModal }) => {
 

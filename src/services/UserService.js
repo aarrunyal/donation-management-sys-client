@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { HttpUrlConfigService } from './HttpUrlConfigService';
 
-export class UserService extends HttpUrlConfigService {
+export default class UserService extends HttpUrlConfigService {
 	constructor() {
 		super();
 		this.apiUrl = `${this.apiUrl}` + 'admin/user';

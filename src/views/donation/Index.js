@@ -25,7 +25,7 @@ import Helper from 'src/services/Helper';
 import Toasts from 'src/components/toast/Toast';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { DonationService } from 'src/services/DonationService';
+import DonationService from 'src/services/DonationService';
 import DonationDetail from 'src/components/donation/DonationDetail';
 import { useNavigate } from 'react-router-dom';
 
@@ -116,10 +116,10 @@ const Donation = () => {
 	})
 
 	const toggleModal = (donation) => {
-		if(modal){
+		if (modal) {
 			setModal(false)
 			setDonation({})
-		}else{
+		} else {
 			setModal(true)
 			setDonation(donation)
 		}
@@ -132,8 +132,8 @@ const Donation = () => {
 	return (
 		<CRow>
 			<CCol xs={12} className='mb-2 ' >
-				<CButton color="success"  onClick={()=>navigate("/donation-create")}>
-					<CIcon size='sm' className='mx-2' icon={cilPlus}/>
+				<CButton color="success" onClick={() => navigate("/donation-create")}>
+					<CIcon size='sm' className='mx-2' icon={cilPlus} />
 					Add Donation
 				</CButton>
 			</CCol>
@@ -151,6 +151,7 @@ const Donation = () => {
 							<CTableHead color="dark">
 								<CTableRow>
 									<CTableHeaderCell scope="col">#</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Image</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Campaign Name</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Event Date</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Expected Collection($)</CTableHeaderCell>
@@ -167,6 +168,15 @@ const Donation = () => {
 											<CTableHeaderCell scope="row">
 												{index + 1}
 											</CTableHeaderCell>
+											<CTableDataCell>
+												{
+													donation.image ?
+														<img src={helper.buildImagePath(donation.image_path, donation.image, "thumb")}  height={"50px"} width={"50px"} />
+														:
+														null
+												}
+
+											</CTableDataCell>
 											<CTableDataCell>{`${donation.name}`}</CTableDataCell>
 											<CTableDataCell>
 												<CBadge size='lg' color='info'>

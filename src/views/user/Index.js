@@ -18,7 +18,7 @@ import {
 	CTableHeaderCell,
 	CTableRow,
 } from '@coreui/react';
-import { UserService } from 'src/services/UserService';
+import UserService from 'src/services/UserService';
 
 import CIcon from '@coreui/icons-react';
 import { cibCircle, cibSamsung, cilAlignCenter, cilCheckAlt, cilCheckCircle, cilCircle, cilPencil, cilPlus, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
