@@ -12,7 +12,8 @@ export default class DonationService extends HttpUrlConfigService {
 	}
 
 	async get(id) {
-		let url = `${this.apiUrl}`;
+		let url = `${this.apiUrl}/${id}`;
+		return await axios.get(url, this.header);
 	}
 
 	async create(data) {

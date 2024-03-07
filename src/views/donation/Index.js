@@ -125,6 +125,10 @@ const Donation = () => {
 		}
 	}
 
+	const openUpdatePage = (donation)=>{
+		navigate(`/donation/${donation.id}/update`)
+	}
+
 	useEffect(() => {
 		getDonations();
 	}, []);
@@ -222,7 +226,7 @@ const Donation = () => {
 															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Expired
 														</CDropdownItem>
 
-														<CDropdownItem>
+														<CDropdownItem onClick={()=>openUpdatePage(donation)}>
 															<CIcon size='lg' icon={cilPencil} className='mx-2' />Edit
 														</CDropdownItem>
 														<CDropdownItem onClick={() => deleteDonation(donation.id)}>
