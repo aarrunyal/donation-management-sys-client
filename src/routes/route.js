@@ -9,6 +9,7 @@ const User = React.lazy(() => import('../views/user/Index'));
 const Donation = React.lazy(() => import("../views/donation/Index"))
 const CreateDonation = React.lazy(() => import("../views/donation/Create"))
 const UpdateDonation = React.lazy(() => import("../views/donation/Update"))
+const Donate = React.lazy(() => import("../views/donate/Index"))
 
 const routes = [
 	{ path: '/', exact: true, name: 'Home' },
@@ -20,6 +21,7 @@ const routes = [
 	{ path: '/donation', name: 'Donation', element: Donation },
 	{ path: '/donation-create', name: 'Create Donation', element: CreateDonation },
 	{ path: '/donation/:id/update', name: 'Update Donation', element: UpdateDonation },
+	{ path: '/donate/:id', name: 'Donate', element: Donate },
 
 ];
 

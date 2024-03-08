@@ -10,6 +10,9 @@ import {
 	CDropdownItem,
 	CDropdownMenu,
 	CDropdownToggle,
+	CFormInput,
+	CFormLabel,
+	CFormSelect,
 	CRow,
 	CTable,
 	CTableBody,
@@ -20,7 +23,7 @@ import {
 } from '@coreui/react';
 
 import CIcon from '@coreui/icons-react';
-import { cilAlignCenter, cilCheck, cilPencil, cilPlus, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
+import { cilAlignCenter, cilCheck, cilPencil, cilPlus, cilSearch, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
 import Helper from 'src/services/Helper';
 import Toasts from 'src/components/toast/Toast';
 import { confirmAlert } from 'react-confirm-alert';
@@ -125,7 +128,7 @@ const Donation = () => {
 		}
 	}
 
-	const openUpdatePage = (donation)=>{
+	const openUpdatePage = (donation) => {
 		navigate(`/donation/${donation.id}/update`)
 	}
 
@@ -135,11 +138,86 @@ const Donation = () => {
 
 	return (
 		<CRow>
-			<CCol xs={12} className='mb-2 ' >
-				<CButton color="success" onClick={() => navigate("/donation-create")}>
+			<CCol xs={12} className='mb-2 text-end' >
+				<CButton color="info" className='text-light' onClick={() => navigate("/donation-create")}>
 					<CIcon size='sm' className='mx-2' icon={cilPlus} />
 					Add Donation
 				</CButton>
+			</CCol>
+			<CCol xs={12} className='mb-2 ' >
+				<CCard>
+					<CCardBody>
+						<CRow>
+							<CCol xs={4}>
+								<CFormLabel htmlFor="validationCustom02">Donation / Campaign Name</CFormLabel>
+								<CFormInput
+									type="text"
+									name="name"
+									placeholder='Donation / Campaign Name'
+								/>
+							</CCol>
+							<CCol xs={4}>
+								<CFormLabel htmlFor="validationCustom02">Expected Collection</CFormLabel>
+								<CFormInput
+									type="number"
+									name="expected_collection"
+									placeholder='Expected Collection'
+								/>
+							</CCol>
+
+							<CCol xs={4}>
+								<CFormLabel htmlFor="validationCustom02">Event Date</CFormLabel>
+								<CFormInput
+									type="date"
+									name="event_date"
+								/>
+							</CCol>
+						</CRow>
+						<br />
+						<CRow>
+							<CCol xs={4}>
+								<CFormLabel htmlFor="validationCustom02">Status</CFormLabel>
+								<CFormSelect
+									type="date"
+									name="event_date"
+								>
+									<option value="active">Active</option>
+									<option value="not_active">In-active</option>
+								</CFormSelect>
+							</CCol>
+
+							<CCol xs={4}>
+								<CFormLabel htmlFor="validationCustom02">Verification Status</CFormLabel>
+								<CFormSelect
+									type="date"
+									name="event_date"
+								>
+									<option value="verified">Verified</option>
+									<option value="not_verified">Not Verified</option>
+								</CFormSelect>
+							</CCol>
+
+							<CCol xs={4}>
+								<CFormLabel htmlFor="validationCustom02">Expiration Status</CFormLabel>
+								<CFormSelect
+									type="date"
+									name="event_date"
+								>
+									<option value="expired">Expired</option>
+									<option value="not_expired">Not Expired</option>
+								</CFormSelect>
+							</CCol>
+						</CRow>
+						<br />
+						<CRow>
+						<CCol xs={4}>
+								<CButton color='info' className='text-light'>
+									<CIcon icon={cilSearch} className='mx-2'></CIcon>
+									Search</CButton>
+							</CCol>
+						</CRow>
+					</CCardBody>
+				</CCard>
 			</CCol>
 			<CCol xs={12}>
 				<CCard className="mb-4">
@@ -175,13 +253,15 @@ const Donation = () => {
 											<CTableDataCell>
 												{
 													donation.image ?
-														<img src={helper.buildImagePath(donation.image_path, donation.image, "thumb")}  height={"50px"} width={"50px"} />
+														<img src={helper.buildImagePath(donation.image_path, donation.image, "thumb")} height={"50px"} width={"50px"} />
 														:
 														null
 												}
 
 											</CTableDataCell>
-											<CTableDataCell>{`${donation.name}`}</CTableDataCell>
+											<CTableDataCell>
+												<a className='nav-link text-dark' onClick={() => { navigate(`/donate/${donation.id}`) }}>{`${donation.name}`}</a>
+											</CTableDataCell>
 											<CTableDataCell>
 												<CBadge size='lg' color='info'>
 													{donation.event_date}
@@ -226,7 +306,7 @@ const Donation = () => {
 															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Expired
 														</CDropdownItem>
 
-														<CDropdownItem onClick={()=>openUpdatePage(donation)}>
+														<CDropdownItem onClick={() => openUpdatePage(donation)}>
 															<CIcon size='lg' icon={cilPencil} className='mx-2' />Edit
 														</CDropdownItem>
 														<CDropdownItem onClick={() => deleteDonation(donation.id)}>

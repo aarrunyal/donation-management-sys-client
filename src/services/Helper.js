@@ -1,3 +1,4 @@
+import noImage from "../assets/images/no_image.jpeg"
 export default class Helper {
 
     passwordRegex =
@@ -39,7 +40,6 @@ export default class Helper {
         }
         return badge;
     })
-
 
     validatePassword = (password) => {
         if (password === '') return false;
@@ -131,9 +131,17 @@ export default class Helper {
     })
 
 
-    buildImagePath = (image_path, imageName, imageType) => {
+    buildImagePath = (image_path = null, imageName = null, imageType = null) => {
+        if (!image_path || !imageName)
+            return noImage
         if (imageType == "thumb")
             return `${process.env.REACT_APP_API_ENDPOINT}/${image_path}/thumb/${imageName}`
         return `${process.env.REACT_APP_API_ENDPOINT}/${image_path}/${imageName}`
+    }
+
+    addZeroes = (value = null, noOfZeros = 2) => {
+        if (!value)
+            return "0.00";
+        return noOfZeros.toFixed(Math.max(((value + '').split(".")[noOfZeros] || "").length, 2));
     }
 }

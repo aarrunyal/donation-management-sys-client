@@ -111,8 +111,8 @@ const Users = () => {
 
 	return (
 		<CRow>
-			<CCol xs={12} className='mb-2 ' >
-				<CButton color="success" onClick={() => openModal("create_user", {})}>
+			<CCol xs={12} className='mb-2 text-end'>
+				<CButton color="info" className='text-light' onClick={() => openModal("create_user", {})}>
 					<CIcon size='sm' className='mx-2' icon={cilPlus} />
 					Add User
 				</CButton>

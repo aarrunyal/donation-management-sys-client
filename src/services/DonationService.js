@@ -40,4 +40,9 @@ export default class DonationService extends HttpUrlConfigService {
 		let url = `${this.apiUrl}/${id}/${flag}`;
 		return await axios.get(url, this.header);
 	}
+
+	async getOtherCampaignRandomly(id, size){
+		let url = `${this.apiUrl}/${id}/randomly/${size}`;
+		return await axios.get(url, this.header);
+	}
 }
