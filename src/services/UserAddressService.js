@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { HttpUrlConfigService } from './HttpUrlConfigService';
 import Helper from './Helper';
-export default class DonationService extends HttpUrlConfigService {
+export default class UserAddressService extends HttpUrlConfigService {
 
 	constructor() {
 		super();
-		this.apiUrl = `${this.apiUrl}` + 'admin/donation';
+		this.apiUrl = `${this.apiUrl}` + 'admin/user-address';
 		this.helper = new Helper()
 	}
 
@@ -41,16 +41,5 @@ export default class DonationService extends HttpUrlConfigService {
 	async delete(id) {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.delete(url, this.header);
-	}
-
-
-	async toggleStatus(id, flag) {
-		let url = `${this.apiUrl}/${id}/${flag}`;
-		return await axios.get(url, this.header);
-	}
-
-	async getOtherCampaignRandomly(id, size) {
-		let url = `${this.apiUrl}/${id}/randomly/${size}`;
-		return await axios.get(url, this.header);
 	}
 }

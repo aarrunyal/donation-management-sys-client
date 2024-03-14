@@ -8,11 +8,6 @@ export default class UserService extends HttpUrlConfigService {
 	}
 
 
-	// formData(){
-	// 	let fData = new FormData({
-
-	// 	});
-	// }
 
 	async all() {
 		return await axios.get(this.apiUrl, this.header);

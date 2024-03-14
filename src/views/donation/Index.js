@@ -23,7 +23,17 @@ import {
 } from '@coreui/react';
 
 import CIcon from '@coreui/icons-react';
-import { cilAlignCenter, cilCheck, cilPencil, cilPlus, cilSearch, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
+import {
+	cilAlignCenter,
+	cilCheck,
+	cilPencil,
+	cilPlus,
+	cilSearch,
+	cilTrash,
+	cilUser,
+	cilUserX,
+	cilVerticalAlignCenter,
+} from '@coreui/icons';
 import Helper from 'src/services/Helper';
 import Toasts from 'src/components/toast/Toast';
 import { confirmAlert } from 'react-confirm-alert';
@@ -40,17 +50,21 @@ const Donation = () => {
 
 	const [donations, setDonations] = useState([]);
 
-	const [modal, setModal] = useState(false)
+	const [modal, setModal] = useState(false);
 
-	const [donation, setDonation] = useState({})
+	const [donation, setDonation] = useState({});
+
+	const [filter, setFilter] = useState({
+		status: 'active',
+		verified: 'verified',
+		expired: 'not_expired',
+	});
 
 	const navigate = useNavigate();
 
-
-
 	const getDonations = () => {
 		donationService
-			.all()
+			.all(filter)
 			.then((response) => {
 				setDonations(response.data);
 			})
@@ -59,8 +73,7 @@ const Donation = () => {
 			});
 	};
 
-
-	const deleteDonation = ((id) => {
+	const deleteDonation = (id) => {
 		confirmAlert({
 			title: 'Deleting donation campaign',
 			message: 'Are you sure?',
@@ -68,32 +81,31 @@ const Donation = () => {
 				{
 					label: 'Yes',
 					onClick: () => {
-						donationService.delete(id).then(res => {
-							childRef.current.showToast('success', res.data.data);
-							getDonations()
-						}).catch(err => {
-							childRef.current.showToast('error', err.response.data.message);
-						})
-					}
+						donationService
+							.delete(id)
+							.then((res) => {
+								childRef.current.showToast('success', res.data.data);
+								getDonations();
+							})
+							.catch((err) => {
+								childRef.current.showToast('error', err.response.data.message);
+							});
+					},
 				},
 				{
 					label: 'No',
-					onClick: () => getDonations()
-				}
-			]
+					onClick: () => getDonations(),
+				},
+			],
 		});
+	};
 
-	})
-
-
-	const toggleStatus = ((donation, flag) => {
-
-		if (flag == "active")
-			flag = helper.generateStatusText(donation.status, flag)
-		else if (flag == "verify")
-			flag = helper.generateStatusText(donation.verified, flag)
-		else
-			flag = helper.generateStatusText(donation.expired, flag)
+	const toggleStatus = (donation, flag) => {
+		if (flag == 'active')
+			flag = helper.generateStatusText(donation.status, flag);
+		else if (flag == 'verify')
+			flag = helper.generateStatusText(donation.verified, flag);
+		else flag = helper.generateStatusText(donation.expired, flag);
 
 		confirmAlert({
 			title: `Changing status of campaign to ${flag}`,
@@ -102,35 +114,45 @@ const Donation = () => {
 				{
 					label: 'Yes',
 					onClick: () => {
-						donationService.toggleStatus(donation.id, flag).then(res => {
-							childRef.current.showToast('success', res.data.data);
-							getDonations()
-						}).catch(err => {
-							childRef.current.showToast('error', err.response.data.message);
-						})
-					}
+						donationService
+							.toggleStatus(donation.id, flag)
+							.then((res) => {
+								childRef.current.showToast('success', res.data.data);
+								getDonations();
+							})
+							.catch((err) => {
+								childRef.current.showToast('error', err.response.data.message);
+							});
+					},
 				},
 				{
 					label: 'No',
-					onClick: () => getDonations()
-				}
-			]
+					onClick: () => getDonations(),
+				},
+			],
 		});
-	})
+	};
 
 	const toggleModal = (donation) => {
 		if (modal) {
-			setModal(false)
-			setDonation({})
+			setModal(false);
+			setDonation({});
 		} else {
-			setModal(true)
-			setDonation(donation)
+			setModal(true);
+			setDonation(donation);
 		}
-	}
+	};
 
 	const openUpdatePage = (donation) => {
-		navigate(`/donation/${donation.id}/update`)
-	}
+		navigate(`/donation/${donation.id}/update`);
+	};
+
+	const handleFilter = (event) => {
+		setFilter((prevState) => ({
+			...prevState,
+			[event.target.name]: event.target.value,
+		}));
+	};
 
 	useEffect(() => {
 		getDonations();
@@ -138,30 +160,40 @@ const Donation = () => {
 
 	return (
 		<CRow>
-			<CCol xs={12} className='mb-2 text-end' >
-				<CButton color="info" className='text-light' onClick={() => navigate("/donation-create")}>
-					<CIcon size='sm' className='mx-2' icon={cilPlus} />
+			<CCol xs={12} className="mb-2 text-end">
+				<CButton
+					color="info"
+					className="text-light"
+					onClick={() => navigate('/donation-create')}
+				>
+					<CIcon size="sm" className="mx-2" icon={cilPlus} />
 					Add Donation
 				</CButton>
 			</CCol>
-			<CCol xs={12} className='mb-2 ' >
+			<CCol xs={12} className="mb-2 ">
 				<CCard>
 					<CCardBody>
 						<CRow>
 							<CCol xs={4}>
-								<CFormLabel htmlFor="validationCustom02">Donation / Campaign Name</CFormLabel>
+								<CFormLabel htmlFor="validationCustom02">
+									Donation / Campaign Name
+								</CFormLabel>
 								<CFormInput
 									type="text"
 									name="name"
-									placeholder='Donation / Campaign Name'
+									onChange={handleFilter}
+									placeholder="Donation / Campaign Name"
 								/>
 							</CCol>
 							<CCol xs={4}>
-								<CFormLabel htmlFor="validationCustom02">Expected Collection</CFormLabel>
+								<CFormLabel htmlFor="validationCustom02">
+									Expected Collection
+								</CFormLabel>
 								<CFormInput
 									type="number"
 									name="expected_collection"
-									placeholder='Expected Collection'
+									onChange={handleFilter}
+									placeholder="Expected Collection"
 								/>
 							</CCol>
 
@@ -170,6 +202,7 @@ const Donation = () => {
 								<CFormInput
 									type="date"
 									name="event_date"
+									onChange={handleFilter}
 								/>
 							</CCol>
 						</CRow>
@@ -179,7 +212,9 @@ const Donation = () => {
 								<CFormLabel htmlFor="validationCustom02">Status</CFormLabel>
 								<CFormSelect
 									type="date"
-									name="event_date"
+									name="status"
+									onChange={handleFilter}
+									value={filter.status}
 								>
 									<option value="active">Active</option>
 									<option value="not_active">In-active</option>
@@ -187,10 +222,14 @@ const Donation = () => {
 							</CCol>
 
 							<CCol xs={4}>
-								<CFormLabel htmlFor="validationCustom02">Verification Status</CFormLabel>
+								<CFormLabel htmlFor="validationCustom02">
+									Verification Status
+								</CFormLabel>
 								<CFormSelect
 									type="date"
-									name="event_date"
+									name="verified"
+									onChange={handleFilter}
+									value={filter.verified}
 								>
 									<option value="verified">Verified</option>
 									<option value="not_verified">Not Verified</option>
@@ -198,10 +237,14 @@ const Donation = () => {
 							</CCol>
 
 							<CCol xs={4}>
-								<CFormLabel htmlFor="validationCustom02">Expiration Status</CFormLabel>
+								<CFormLabel htmlFor="validationCustom02">
+									Expiration Status
+								</CFormLabel>
 								<CFormSelect
 									type="date"
-									name="event_date"
+									name="expired"
+									onChange={handleFilter}
+									value={filter.expired}
 								>
 									<option value="expired">Expired</option>
 									<option value="not_expired">Not Expired</option>
@@ -210,10 +253,11 @@ const Donation = () => {
 						</CRow>
 						<br />
 						<CRow>
-						<CCol xs={4}>
-								<CButton color='info' className='text-light'>
-									<CIcon icon={cilSearch} className='mx-2'></CIcon>
-									Search</CButton>
+							<CCol xs={4}>
+								<CButton color="info" className="text-light">
+									<CIcon icon={cilSearch} className="mx-2"></CIcon>
+									Search
+								</CButton>
 							</CCol>
 						</CRow>
 					</CCardBody>
@@ -221,14 +265,10 @@ const Donation = () => {
 			</CCol>
 			<CCol xs={12}>
 				<CCard className="mb-4">
-
 					<CCardHeader>
 						<strong>Donation</strong>
 					</CCardHeader>
 					<CCardBody>
-						<CRow>
-
-						</CRow>
 						<CTable>
 							<CTableHead color="dark">
 								<CTableRow>
@@ -236,7 +276,9 @@ const Donation = () => {
 									<CTableHeaderCell scope="col">Image</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Campaign Name</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Event Date</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Expected Collection($)</CTableHeaderCell>
+									<CTableHeaderCell scope="col">
+										Expected Collection($)
+									</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
 									<CTableHeaderCell scope="col">View</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
@@ -245,36 +287,48 @@ const Donation = () => {
 							<CTableBody>
 								{donations.map((donation, index) => {
 									return (
-
 										<CTableRow key={donation.id}>
 											<CTableHeaderCell scope="row">
 												{index + 1}
 											</CTableHeaderCell>
 											<CTableDataCell>
-												{
-													donation.image ?
-														<img src={helper.buildImagePath(donation.image_path, donation.image, "thumb")} height={"50px"} width={"50px"} />
-														:
-														null
-												}
-
+												{donation.image ? (
+													<img
+														src={helper.buildImagePath(
+															donation.image_path,
+															donation.image,
+															'thumb'
+														)}
+														height={'50px'}
+														width={'50px'}
+													/>
+												) : null}
 											</CTableDataCell>
 											<CTableDataCell>
-												<a className='nav-link text-dark' onClick={() => { navigate(`/donate/${donation.id}`) }}>{`${donation.name}`}</a>
+												<a
+													className="nav-link text-dark"
+													onClick={() => {
+														toggleModal(donation);
+													}}
+												>{`${donation.name ? donation.name : null}`}</a>
 											</CTableDataCell>
 											<CTableDataCell>
-												<CBadge size='lg' color='info'>
+												<CBadge size="lg" color="info">
 													{donation.event_date}
 												</CBadge>
 											</CTableDataCell>
 											<CTableDataCell>
-												<CButton color="info" size='xl' className='text-white' >
+												<CButton color="info" size="xl" className="text-white">
 													{`$ ${donation.expected_collection}`}
 												</CButton>
 											</CTableDataCell>
 											<CTableDataCell>
 												<>
-													<CBadge color={helper.badgeColor(donation.expired ? "expired" : "not_expired")}>
+													<CBadge
+														color={helper.badgeColor(
+															donation.expired ? 'expired' : 'not_expired'
+														)}
+													>
 														{helper.expiredText(donation.expired)}
 													</CBadge>
 													<br />
@@ -286,35 +340,72 @@ const Donation = () => {
 														{helper.verifiedText(donation.verified)}
 													</CBadge>
 												</>
-
-
 											</CTableDataCell>
 											<CTableDataCell>
-												<CIcon onClick={() => toggleModal(donation)} size='lg' icon={cilAlignCenter} className='m-2' />
+												<CIcon
+													onClick={() => toggleModal(donation)}
+													size="lg"
+													icon={cilAlignCenter}
+													className="m-2"
+												/>
 											</CTableDataCell>
 											<CTableDataCell>
 												<CDropdown>
 													<CDropdownToggle color="light"></CDropdownToggle>
 													<CDropdownMenu>
-														<CDropdownItem onClick={() => toggleStatus(donation, "active")}>
-															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Active
+														<CDropdownItem
+															onClick={() => toggleStatus(donation, 'active')}
+														>
+															<CIcon
+																size="lg"
+																icon={cilCheck}
+																className="mx-2"
+															/>
+															Mark as Active
 														</CDropdownItem>
-														<CDropdownItem onClick={() => toggleStatus(donation, "verify")}>
-															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Verified
+														<CDropdownItem
+															onClick={() => toggleStatus(donation, 'verify')}
+														>
+															<CIcon
+																size="lg"
+																icon={cilCheck}
+																className="mx-2"
+															/>
+															Mark as Verified
 														</CDropdownItem>
-														<CDropdownItem onClick={() => toggleStatus(donation, "expire")}>
-															<CIcon size='lg' icon={cilCheck} className='mx-2' />Mark as Expired
+														<CDropdownItem
+															onClick={() => toggleStatus(donation, 'expire')}
+														>
+															<CIcon
+																size="lg"
+																icon={cilCheck}
+																className="mx-2"
+															/>
+															Mark as Expired
 														</CDropdownItem>
 
-														<CDropdownItem onClick={() => openUpdatePage(donation)}>
-															<CIcon size='lg' icon={cilPencil} className='mx-2' />Edit
+														<CDropdownItem
+															onClick={() => openUpdatePage(donation)}
+														>
+															<CIcon
+																size="lg"
+																icon={cilPencil}
+																className="mx-2"
+															/>
+															Edit
 														</CDropdownItem>
-														<CDropdownItem onClick={() => deleteDonation(donation.id)}>
-															<CIcon size='lg' icon={cilTrash} className='mx-2' /> Delete
+														<CDropdownItem
+															onClick={() => deleteDonation(donation.id)}
+														>
+															<CIcon
+																size="lg"
+																icon={cilTrash}
+																className="mx-2"
+															/>{' '}
+															Delete
 														</CDropdownItem>
 													</CDropdownMenu>
 												</CDropdown>
-
 											</CTableDataCell>
 										</CTableRow>
 									);
@@ -329,11 +420,13 @@ const Donation = () => {
 						</CTable>
 					</CCardBody>
 				</CCard>
-
 			</CCol>
-			<DonationDetail modal={modal} donation={donation} toggleModal={toggleModal} />
+			<DonationDetail
+				modal={modal}
+				donation={donation}
+				toggleModal={toggleModal}
+			/>
 			<Toasts childRef={childRef} />
-
 		</CRow>
 	);
 };

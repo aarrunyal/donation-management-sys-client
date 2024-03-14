@@ -144,4 +144,14 @@ export default class Helper {
             return "0.00";
         return noOfZeros.toFixed(Math.max(((value + '').split(".")[noOfZeros] || "").length, 2));
     }
+
+
+    generateQueryString = (object = {}) => {
+        console.log(object)
+        if (Object.values(object).length<=0){
+            return null;
+        }else{
+          return  new URLSearchParams(object).toString()
+        }
+    }
 }

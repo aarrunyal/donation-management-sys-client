@@ -46,7 +46,7 @@ const Toasts = (props) => {
 					type: type,
 					isLoading: false,
 					progress: undefined,
-					autoClose: 5000,
+					autoClose: 1000,
 				});
 				setTimeout(() => {
 					localStorage.removeItem('loading');

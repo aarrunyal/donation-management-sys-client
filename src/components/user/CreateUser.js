@@ -79,7 +79,7 @@ const CreateUser = ({ modal, user, closeModal }) => {
 
     return (
         <>
-            <CModal
+            <CModal             backdrop={'static'}
                 visible={modal}
                 onClose={closeModal}
             >

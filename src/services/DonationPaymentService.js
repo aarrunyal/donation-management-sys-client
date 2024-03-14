@@ -5,17 +5,13 @@ export default class DonationService extends HttpUrlConfigService {
 
 	constructor() {
 		super();
-		this.apiUrl = `${this.apiUrl}` + 'admin/donation';
+		this.apiUrl = `${this.apiUrl}` + 'admin/donation-payment';
 		this.helper = new Helper()
 	}
 
 	async all(filter = {}) {
-		let queryString = this.helper.generateQueryString(filter);
+		// let queryString = this.helper.generateQueryString(filter);
 		let url = this.apiUrl
-		// console.log(queryString)
-		// if(queryString){
-		// 	url = url + "?"+ queryString
-		// }
 		return await axios.get(url, this.header);
 	}
 
@@ -28,10 +24,7 @@ export default class DonationService extends HttpUrlConfigService {
 		return await axios.post(this.apiUrl, data, this.header);
 	}
 
-	async uploadImage(id, data) {
-		let url = `${this.apiUrl}/${id}/upload`;
-		return await axios.post(url, data, this.header);
-	}
+
 
 	async update(id, data) {
 		let url = `${this.apiUrl}/${id}`;
@@ -44,13 +37,4 @@ export default class DonationService extends HttpUrlConfigService {
 	}
 
 
-	async toggleStatus(id, flag) {
-		let url = `${this.apiUrl}/${id}/${flag}`;
-		return await axios.get(url, this.header);
-	}
-
-	async getOtherCampaignRandomly(id, size) {
-		let url = `${this.apiUrl}/${id}/randomly/${size}`;
-		return await axios.get(url, this.header);
-	}
 }
