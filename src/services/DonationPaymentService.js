@@ -24,8 +24,6 @@ export default class DonationPaymentService extends HttpUrlConfigService {
 		return await axios.post(this.apiUrl, data, this.header);
 	}
 
-
-
 	async update(id, data) {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.put(url, data, this.header);
@@ -35,9 +33,6 @@ export default class DonationPaymentService extends HttpUrlConfigService {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.delete(url, this.header);
 	}
-
-	
-
 
 	async createPaymentIntent(data) {
 		let url = `${this.apiUrl}/create-payment-intent`;

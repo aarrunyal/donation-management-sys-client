@@ -51,6 +51,12 @@ const _nav = [
 		to: '/donation',
 		icon: <CIcon icon={cilHealing} customClassName="nav-icon" />,
 	},
+	{
+		component: CNavItem,
+		name: 'Donation History',
+		to: '/history',
+		icon: <CIcon icon={cilHealing} customClassName="nav-icon" />,
+	},
 ];
 
 export default _nav;

@@ -285,131 +285,157 @@ const Donation = () => {
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
-								{donations.map((donation, index) => {
-									return (
-										<CTableRow key={donation.id}>
-											<CTableHeaderCell scope="row">
-												{index + 1}
-											</CTableHeaderCell>
-											<CTableDataCell>
-												{donation.image ? (
-													<img
-														src={helper.buildImagePath(
-															donation.image_path,
-															donation.image,
-															'thumb'
-														)}
-														height={'50px'}
-														width={'50px'}
-													/>
-												) : null}
-											</CTableDataCell>
-											<CTableDataCell>
-												<a
-													className="nav-link text-dark"
-													onClick={() => {
-														toggleModal(donation);
-													}}
-												>{`${donation.name ? donation.name : null}`}</a>
-											</CTableDataCell>
-											<CTableDataCell>
-												<CBadge size="lg" color="info">
-													{donation.event_date}
-												</CBadge>
-											</CTableDataCell>
-											<CTableDataCell>
-												<CButton color="info" size="xl" className="text-white">
-													{`$ ${donation.expected_collection}`}
-												</CButton>
-											</CTableDataCell>
-											<CTableDataCell>
-												<>
-													<CBadge
-														color={helper.badgeColor(
-															donation.expired ? 'expired' : 'not_expired'
-														)}
-													>
-														{helper.expiredText(donation.expired)}
-													</CBadge>
-													<br />
-													<CBadge color={helper.badgeColor(donation.status)}>
-														{helper.activeText(donation.status)}
-													</CBadge>
-													<br />
-													<CBadge color={helper.badgeColor(donation.verified)}>
-														{helper.verifiedText(donation.verified)}
-													</CBadge>
-												</>
-											</CTableDataCell>
-											<CTableDataCell>
-												<CIcon
-													onClick={() => toggleModal(donation)}
-													size="lg"
-													icon={cilAlignCenter}
-													className="m-2"
-												/>
-											</CTableDataCell>
-											<CTableDataCell>
-												<CDropdown>
-													<CDropdownToggle color="light"></CDropdownToggle>
-													<CDropdownMenu>
-														<CDropdownItem
-															onClick={() => toggleStatus(donation, 'active')}
-														>
-															<CIcon
-																size="lg"
-																icon={cilCheck}
-																className="mx-2"
+								{donations.length > 0 ? (
+									<>
+										{donations.map((donation, index) => {
+											return (
+												<CTableRow key={donation.id}>
+													<CTableHeaderCell scope="row">
+														{index + 1}
+													</CTableHeaderCell>
+													<CTableDataCell>
+														{donation.image ? (
+															<img
+																src={helper.buildImagePath(
+																	donation.image_path,
+																	donation.image,
+																	'thumb'
+																)}
+																height={'50px'}
+																width={'50px'}
 															/>
-															Mark as Active
-														</CDropdownItem>
-														<CDropdownItem
-															onClick={() => toggleStatus(donation, 'verify')}
+														) : null}
+													</CTableDataCell>
+													<CTableDataCell>
+														<a
+															className="nav-link text-dark"
+															onClick={() => {
+																toggleModal(donation);
+															}}
+														>{`${donation.name ? donation.name : null}`}</a>
+													</CTableDataCell>
+													<CTableDataCell>
+														<CBadge size="lg" color="info">
+															{donation.event_date}
+														</CBadge>
+													</CTableDataCell>
+													<CTableDataCell>
+														<CButton
+															color="info"
+															size="xl"
+															className="text-white"
 														>
-															<CIcon
-																size="lg"
-																icon={cilCheck}
-																className="mx-2"
-															/>
-															Mark as Verified
-														</CDropdownItem>
-														<CDropdownItem
-															onClick={() => toggleStatus(donation, 'expire')}
-														>
-															<CIcon
-																size="lg"
-																icon={cilCheck}
-																className="mx-2"
-															/>
-															Mark as Expired
-														</CDropdownItem>
+															{`$ ${donation.expected_collection}`}
+														</CButton>
+													</CTableDataCell>
+													<CTableDataCell>
+														<>
+															<CBadge
+																color={helper.badgeColor(
+																	donation.expired ? 'expired' : 'not_expired'
+																)}
+															>
+																{helper.expiredText(donation.expired)}
+															</CBadge>
+															<br />
+															<CBadge
+																color={helper.badgeColor(donation.status)}
+															>
+																{helper.activeText(donation.status)}
+															</CBadge>
+															<br />
+															<CBadge
+																color={helper.badgeColor(donation.verified)}
+															>
+																{helper.verifiedText(donation.verified)}
+															</CBadge>
+														</>
+													</CTableDataCell>
+													<CTableDataCell>
+														<CIcon
+															onClick={() => toggleModal(donation)}
+															size="lg"
+															icon={cilAlignCenter}
+															className="m-2"
+														/>
+													</CTableDataCell>
+													<CTableDataCell>
+														<CDropdown>
+															<CDropdownToggle color="light"></CDropdownToggle>
+															<CDropdownMenu>
+																<CDropdownItem
+																	onClick={() =>
+																		toggleStatus(donation, 'active')
+																	}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilCheck}
+																		className="mx-2"
+																	/>
+																	Mark as Active
+																</CDropdownItem>
+																<CDropdownItem
+																	onClick={() =>
+																		toggleStatus(donation, 'verify')
+																	}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilCheck}
+																		className="mx-2"
+																	/>
+																	Mark as Verified
+																</CDropdownItem>
+																<CDropdownItem
+																	onClick={() =>
+																		toggleStatus(donation, 'expire')
+																	}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilCheck}
+																		className="mx-2"
+																	/>
+																	Mark as Expired
+																</CDropdownItem>
 
-														<CDropdownItem
-															onClick={() => openUpdatePage(donation)}
-														>
-															<CIcon
-																size="lg"
-																icon={cilPencil}
-																className="mx-2"
-															/>
-															Edit
-														</CDropdownItem>
-														<CDropdownItem
-															onClick={() => deleteDonation(donation.id)}
-														>
-															<CIcon
-																size="lg"
-																icon={cilTrash}
-																className="mx-2"
-															/>{' '}
-															Delete
-														</CDropdownItem>
-													</CDropdownMenu>
-												</CDropdown>
+																<CDropdownItem
+																	onClick={() => openUpdatePage(donation)}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilPencil}
+																		className="mx-2"
+																	/>
+																	Edit
+																</CDropdownItem>
+																<CDropdownItem
+																	onClick={() => deleteDonation(donation.id)}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilTrash}
+																		className="mx-2"
+																	/>{' '}
+																	Delete
+																</CDropdownItem>
+															</CDropdownMenu>
+														</CDropdown>
+													</CTableDataCell>
+												</CTableRow>
+											);
+										})}
+									</>
+								) : (
+									<>
+										<CTableRow>
+											<CTableDataCell colSpan={10} className="text-center">
+												No Data found
 											</CTableDataCell>
 										</CTableRow>
-									);
-								})}
+									</>
+								)}
 
 								{/* <CTableRow>
                                     <CTableHeaderCell scope="row">3</CTableHeaderCell>

@@ -88,7 +88,7 @@ const Payment = ({ modal, donation, closeModal }) => {
 	return (
 		<>
 			<CModal visible={modal} backdrop={'static'}>
-				<CModalHeader closeButton>Create User</CModalHeader>
+				<CModalHeader closeButton>Donate</CModalHeader>
 				<CModalBody>
 					{!displayPayment ? (
 						<>
@@ -132,7 +132,7 @@ const Payment = ({ modal, donation, closeModal }) => {
 					) : (
 						<>
 							<CRow className="justify-content-center my-2">
-								<pre>{JSON.stringify(options)}</pre>
+								{/* <pre>{JSON.stringify(options)}</pre> */}
 								{options.amount > 0 ? (
 									<>
 										<CCol md={12}>
