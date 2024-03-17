@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { HttpUrlConfigService } from './HttpUrlConfigService';
 import Helper from './Helper';
-export default class DonationService extends HttpUrlConfigService {
+export default class DonationPaymentService extends HttpUrlConfigService {
 
 	constructor() {
 		super();
@@ -34,6 +34,14 @@ export default class DonationService extends HttpUrlConfigService {
 	async delete(id) {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.delete(url, this.header);
+	}
+
+	
+
+
+	async createPaymentIntent(data) {
+		let url = `${this.apiUrl}/create-payment-intent`;
+		return await axios.post(url, data, this.header);
 	}
 
 

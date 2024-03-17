@@ -5,6 +5,7 @@ import Helper from 'src/services/Helper';
 import Parser from 'html-react-parser';
 import Toasts from 'src/components/toast/Toast';
 import Payment from 'src/components/donate/Payment';
+import { toast } from 'react-toastify';
 
 const Donate = () => {
 	const donationService = new DonationService();
@@ -50,9 +51,9 @@ const Donate = () => {
 	};
 
 	const openModal = () => {
-		// childRef.current.showToast('loading');
+		let id = toast.loading('Loading');
 		setTimeout(() => {
-            // childRef.current.showToast('no_loading');
+			toast.dismiss({ id: id });
 			setModal(true);
 		}, 2000);
 	};
@@ -226,8 +227,9 @@ const Donate = () => {
 					</div>
 				</div>
 				<Toasts childRef={childRef} />
-
-				<Payment modal={modal} donation={state} closeModal={closeModal} />
+				{state && state.id ? (
+					<Payment modal={modal} donation={state} closeModal={closeModal} />
+				) : null}
 			</div>
 		</>
 	);

@@ -12,7 +12,7 @@ export default class Helper {
         let badge = "info"
         switch (color) {
             case "ADMIN":
-                badge = "info"
+                badge = "info"  
                 break;
             case "ORGANISER":
                 badge = "warning"
@@ -142,7 +142,7 @@ export default class Helper {
     addZeroes = (value = null, noOfZeros = 2) => {
         if (!value)
             return "0.00";
-        return noOfZeros.toFixed(Math.max(((value + '').split(".")[noOfZeros] || "").length, 2));
+        return value.toFixed(Math.max(((value + '').split(".")[noOfZeros] || "").length, 2));
     }
 
 
@@ -154,4 +154,16 @@ export default class Helper {
           return  new URLSearchParams(object).toString()
         }
     }
+
+     navigateFromSuccessAndErrorPage = (type) => {
+		let updatedUrl = null
+		if (type == "dashboard") {
+			 updatedUrl =
+				window.location.protocol + '//' + window.location.host + '/#/dashboard';
+		} else {
+			 updatedUrl =
+				window.location.protocol + '//' + window.location.host + '/#/success';
+		}
+		window.history.pushState({ path: updatedUrl }, '', updatedUrl);
+	};
 }
