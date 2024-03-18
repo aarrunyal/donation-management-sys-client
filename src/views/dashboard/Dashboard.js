@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from "react-router-dom"
 
 import {
 	CAvatar,
@@ -53,8 +54,23 @@ import avatar6 from 'src/assets/images/avatars/6.jpg';
 
 import WidgetsBrand from '../widgets/WidgetsBrand';
 import WidgetsDropdown from '../widgets/WidgetsDropdown';
+import { isLoggedIn } from 'src/helpers/IsLoggedIn';
 
 const Dashboard = () => {
+
+	const navigate = useNavigate()
+
+
+	const naviageIfNotLoggedIn = () => {
+		return !isLoggedIn() ? navigate("/login") : null
+	}
+
+	useEffect(() => {
+		naviageIfNotLoggedIn();
+	}, [])
+
+
+
 	const random = (min, max) =>
 		Math.floor(Math.random() * (max - min + 1) + min);
 
@@ -191,10 +207,19 @@ const Dashboard = () => {
 
 	return (
 		<>
+
 			<WidgetsDropdown />
 			<CCard className="mb-4">
 				<CCardBody>
 					<CRow>
+					<div className="card">
+  <img src="" className="card-img-top" alt=""></img>
+  <div className="card-body">
+    <h5 className="card-title">Card title</h5>
+    <p className="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>
+    <a href="#" className="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
 						<CCol sm={5}>
 							<h4 id="traffic" className="card-title mb-0">
 								Traffic

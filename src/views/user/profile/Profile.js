@@ -1,132 +1,182 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import {
-	CButton,
-	CCard,
-	CCardBody,
-	CCardHeader,
-	CCol,
-	CForm,
-	CFormCheck,
-	CFormInput,
-	CFormFeedback,
-	CFormLabel,
-	CFormSelect,
-	CFormTextarea,
+    CButton,
+    CCard,
+    CCardHeader,
+    CForm,
+    CFormInput,
+    CFormSelect,
+    CContainer,
 	CRow,
+	CCol
 } from '@coreui/react';
 
-import { DocsExample } from 'src/components';
+const provinces = [
+    'Alberta',
+    'British Columbia',
+    'Manitoba',
+    'New Brunswick',
+    'Newfoundland and Labrador',
+    'Nova Scotia',
+    'Ontario',
+    'Prince Edward Island',
+    'Quebec',
+    'Saskatchewan',
+];
+
+const genders = ['Male', 'Female', 'Other'];
 
 const UserProfile = () => {
-	return (
-		<CRow>
-			<CCol xs={12}>
-				<CCard className="mb-4">
-					<CCardHeader>
-						<strong>User Profile</strong>
-					</CCardHeader>
-					<CCardBody>
-						<p className="text-medium-emphasis small">
-							Validation styles are available for the following form controls
-							and components:
-						</p>
-						<ul>
-							<li>
-								<code>&lt;CFormInput&gt;</code>s
-							</li>
-							<li>
-								<code>&lt;CFormSelect&gt;</code>s
-							</li>
-							<li>
-								<code>&lt;CFormCheck&gt;</code>s
-							</li>
-						</ul>
-						<DocsExample href="forms/validation#supported-elements">
-							<CForm validated={true}>
-								<div className="mb-3">
-									<CFormLabel
-										htmlFor="validationTextarea"
-										className="form-label"
-									>
-										Textarea
-									</CFormLabel>
-									<CFormTextarea
-										id="validationTextarea"
-										placeholder="Required example textarea"
-										invalid
-										required
-									></CFormTextarea>
-									<CFormFeedback invalid>
-										Please enter a message in the textarea.
-									</CFormFeedback>
-								</div>
-								<CFormCheck
-									className="mb-3"
-									id="validationFormCheck1"
-									label="Check this checkbox"
-									required
-								/>
-								<CFormFeedback invalid>
-									Example invalid feedback text
-								</CFormFeedback>
+    const [formData, setFormData] = useState({
+        contactNumber: '',
+        address: '',
+        province: '',
+        zipCode: '',
+        dob: '',
+        gender: '',
+    });
 
-								<CFormCheck
-									type="radio"
-									name="radio-stacked"
-									id="validationFormCheck2"
-									label="Check this checkbox"
-									required
-								/>
+    const [errors, setErrors] = useState({});
 
-								<CFormCheck
-									className="mb-3"
-									type="radio"
-									name="radio-stacked"
-									id="validationFormCheck3"
-									label="Or toggle this other radio"
-									required
-								/>
-								<CFormFeedback invalid>
-									More example invalid feedback text
-								</CFormFeedback>
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-								<div className="mb-3">
-									<CFormSelect required aria-label="select example">
-										<option>Open this select menu</option>
-										<option value="1">One</option>
-										<option value="2">Two</option>
-										<option value="3">Three</option>
-									</CFormSelect>
-									<CFormFeedback invalid>
-										Example invalid select feedback
-									</CFormFeedback>
-								</div>
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Perform validation here
+        const newErrors = {};
+        // Validation rules...
+        
+        if (Object.keys(newErrors).length === 0) {
+            // Form is valid, submit data or perform further actions
+            console.log('Form submitted:', formData);
+        } else {
+            // Form is invalid, set errors
+            setErrors(newErrors);
+        }
+    };
 
-								<div className="mb-3">
-									<CFormInput
-										type="file"
-										id="validationTextarea"
-										aria-label="file example"
-										required
-									/>
-									<CFormFeedback invalid>
-										Example invalid form file feedback
-									</CFormFeedback>
-								</div>
-
-								<div className="mb-3">
-									<CButton type="submit" color="primary" disabled>
-										Submit form
-									</CButton>
-								</div>
-							</CForm>
-						</DocsExample>
-					</CCardBody>
-				</CCard>
-			</CCol>
-		</CRow>
-	);
+    return (
+        <CContainer>
+            <CCard className="custom-card"> 
+                <CCardHeader>
+                <h2 className='text-info font-weight-bolder text-lg text-center'>User Profile Form</h2>
+                </CCardHeader>
+                <CForm className="g-3" onSubmit={handleSubmit}>
+				<CRow>
+                    <CCol sm={3}>
+                    <div className="mb-3">
+                        <CFormInput
+                            type="tel"
+                            name="contactNumber"
+                            id="validationDefault05"
+                            label="Contact Number"
+                            value={formData.contactNumber}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        {errors.contactNumber && <div className="text-danger">{errors.contactNumber}</div>}
+                    </div>
+                    </CCol>
+                    <CCol sm={6}>
+                    <div className="mb-3">
+                        <CFormInput
+                            type="text"
+                            name="address"
+                            id="validationDefault06"
+                            label="Address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        {errors.address && <div className="text-danger">{errors.address}</div>}
+                    </div>
+                    </CCol>
+                    <CCol sm={3}>
+                    <div className="mb-3">
+                        <CFormSelect
+                            name="province"
+                            id="validationServer07"
+                            label="Province"
+                            value={formData.province}
+                            onChange={handleInputChange}
+                            feedback="Please select your province."
+                            required
+                        >
+                            <option value="">Choose...</option>
+                            {provinces.map((province, index) => (
+                                <option key={index} value={province}>
+                                    {province}
+                                </option>
+                            ))}
+                        </CFormSelect>
+                        {errors.province && <div className="text-danger">{errors.province}</div>}
+                    </div>
+                    </CCol>
+                    <CCol sm={3}>
+                    <div className="mb-3">
+                        <CFormInput
+                            type="text"
+                            name="zipCode"
+                            id="validationDefault08"
+                            label="Zip Code"
+                            value={formData.zipCode}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        {errors.zipCode && <div className="text-danger">{errors.zipCode}</div>}
+                    </div>
+                    <CRow>
+                    <CCol sm={6}>
+                    <div className="mb-3">
+                        <CFormInput
+                            type="date"
+                            name="dob"
+                            id="validationDefault09"
+                            label="Date of Birth"
+                            value={formData.dob}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        {errors.dob && <div className="text-danger">{errors.dob}</div>}
+                    </div>
+                    </CCol>
+                    <CCol sm={6}>
+                    <div className="mb-3">
+                        <CFormSelect
+                            name="gender"
+                            id="validationServer10"
+                            label="Gender"
+                            value={formData.gender}
+                            onChange={handleInputChange}
+                            feedback="Please select your gender."
+                            required
+                        >
+                            <option value="">Choose...</option>
+                            {genders.map((gender, index) => (
+                                <option key={index} value={gender}>
+                                    {gender}
+                                </option>
+                            ))}
+                        </CFormSelect>
+                        {errors.gender && <div className="text-danger">{errors.gender}</div>}
+                    </div>
+                    </CCol>
+                    </CRow>
+                    <CCol sm={6}></CCol>
+                    <div className="mb-3 text-center">
+                        <CButton color="primary" type="submit">
+                            Submit
+                        </CButton>
+                    </div>
+                    </CCol>
+					</CRow>
+                </CForm>
+            </CCard>
+        </CContainer>
+    );
 };
 
 export default UserProfile;
