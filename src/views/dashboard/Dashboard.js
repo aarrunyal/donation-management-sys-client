@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"
 
 import {
@@ -56,9 +56,23 @@ import WidgetsBrand from '../widgets/WidgetsBrand';
 import WidgetsDropdown from '../widgets/WidgetsDropdown';
 import { isLoggedIn } from 'src/helpers/IsLoggedIn';
 
+import RequestAsOrganiser from 'src/components/dashboard/RequestAsOrganiser';
+
 const Dashboard = () => {
 
 	const navigate = useNavigate()
+
+	const [organiserModal, setOrganiserModal] = useState(false)
+
+	const openOrganiserModal = (event)=>{
+		event.preventDefault()
+		setOrganiserModal(true)
+	}
+
+	const closeOrganiserModal = (event)=>{
+		event.preventDefault()
+		setOrganiserModal(false)
+	}
 
 
 	const naviageIfNotLoggedIn = () => {
@@ -217,7 +231,7 @@ const Dashboard = () => {
   <div className="card-body">
     <h5 className="card-title">Card title</h5>
     <p className="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>
-    <a href="#" className="btn btn-primary">Go somewhere</a>
+    <a href="#" className="btn btn-primary" onClick={openOrganiserModal}>Become an Organiser</a>
   </div>
 </div>
 						<CCol sm={5}>
@@ -538,6 +552,7 @@ const Dashboard = () => {
 						</CCardBody>
 					</CCard>
 				</CCol>
+				<RequestAsOrganiser modal={organiserModal} closeModal={closeOrganiserModal} />
 			</CRow>
 		</>
 	);
