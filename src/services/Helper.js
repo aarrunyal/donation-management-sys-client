@@ -131,12 +131,15 @@ export default class Helper {
     })
 
 
-    buildImagePath = (image_path = null, imageName = null, imageType = null) => {
-        if (!image_path || !imageName)
+    buildImagePath = (imagePath = null, imageName = null, imageType = null) => {
+        console.log(imagePath)
+        console.log(imageName)
+        console.log(imageType)
+        if (!imagePath || !imageName)
             return noImage
         if (imageType == "thumb")
-            return `${process.env.REACT_APP_API_ENDPOINT}/${image_path}/thumb/${imageName}`
-        return `${process.env.REACT_APP_API_ENDPOINT}/${image_path}/${imageName}`
+            return `${process.env.REACT_APP_API_ENDPOINT}/${imagePath}/thumb/${imageName}`
+        return `${process.env.REACT_APP_API_ENDPOINT}/${imagePath}/${imageName}`
     }
 
     addZeroes = (value = null, noOfZeros = 2) => {
