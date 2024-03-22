@@ -1,0 +1,76 @@
+.product_height{
+    
+    height:40vh;
+}
+
+.product_card{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width:350px;
+}
+
+.product_image{
+    height: 180px;
+    object-fit: cover;
+
+    aspect-ratio: 2 / 1;
+}
+
+.product_main-heading{
+    
+    font-size:40px;
+    color:red !important;
+}
+
+.product_ratings i{
+    
+    color:orange;
+    
+}
+
+.product_user-ratings h6{
+    margin-top:2px;
+}
+
+.product_colors{
+    display:flex;
+    margin-top:2px;
+}
+
+.product_colors span{
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    cursor:pointer;
+    display:flex;
+    margin-right:6px;
+}
+
+.product_colors span:nth-child(1) {
+    
+    background-color:red;
+    
+}
+
+.product_colors span:nth-child(2) {
+    
+    background-color:blue;
+    
+}
+
+.product_colors span:nth-child(3) {
+    
+    background-color:yellow;
+    
+}
+
+.product_colors span:nth-child(4) {
+    
+    background-color:purple;
+    
+}
+
+.donate_btn{
+    width: 100%;
+    font-size:18px;
+    color:white
+}

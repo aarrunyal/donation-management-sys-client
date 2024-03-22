@@ -10,7 +10,6 @@ export default class DonationPaymentService extends HttpUrlConfigService {
 	}
 
 	async all(filter = {}) {
-		// let queryString = this.helper.generateQueryString(filter);
 		let url = this.apiUrl
 		return await axios.get(url, this.header);
 	}
