@@ -41,6 +41,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import DonationService from 'src/services/DonationService';
 import DonationDetail from 'src/components/donation/DonationDetail';
 import { useNavigate } from 'react-router-dom';
+import VerifyCampaign from 'src/components/donation/VerifyCampaign';
 
 const Donation = () => {
 	const helper = new Helper();
@@ -52,7 +53,10 @@ const Donation = () => {
 
 	const [modal, setModal] = useState(false);
 
+
 	const [donation, setDonation] = useState({});
+
+	const [verifyCampaignModal, setVerifyCampaignModal] = useState(false)
 
 	const [filter, setFilter] = useState({
 		status: 'active',
@@ -142,6 +146,16 @@ const Donation = () => {
 			setDonation(donation);
 		}
 	};
+
+	const toogleVerifyCampaignModal = () => {
+		if (verifyCampaignModal) {
+			setVerifyCampaignModal(false);
+		} else {
+			setVerifyCampaignModal(true);
+		}
+	};
+
+
 
 	const openUpdatePage = (donation) => {
 		navigate(`/donation/${donation.id}/update`);
@@ -363,6 +377,18 @@ const Donation = () => {
 														<CDropdown>
 															<CDropdownToggle color="light"></CDropdownToggle>
 															<CDropdownMenu>
+															<CDropdownItem
+																	onClick={() =>
+																		toogleVerifyCampaignModal('active')
+																	}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilCheck}
+																		className="mx-2"
+																	/>
+																	Verify Campaign
+																</CDropdownItem>
 																<CDropdownItem
 																	onClick={() =>
 																		toggleStatus(donation, 'active')
@@ -452,6 +478,7 @@ const Donation = () => {
 				donation={donation}
 				toggleModal={toggleModal}
 			/>
+			<VerifyCampaign modal={verifyCampaignModal} closeModal={toogleVerifyCampaignModal}/>
 			<Toasts childRef={childRef} />
 		</CRow>
 	);

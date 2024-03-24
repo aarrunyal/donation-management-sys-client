@@ -29,6 +29,7 @@ import Toasts from 'src/components/toast/Toast';
 import UpdateUser from 'src/components/user/UpdateUser';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import VerifyUserRequest from 'src/components/user/VerifyUserRequest';
 
 const Users = () => {
 	const helper = new Helper();
@@ -44,6 +45,8 @@ const Users = () => {
 
 	const [updateUserModal, setUpdateUserModal] = useState(false);
 
+	const [verifyUserReqestModal, setVerifyUserReqestModal] = useState(false)
+
 	const [userDetail, setUserDetail] = useState({})
 
 	const openModal = (modalName, user = {}) => {
@@ -53,6 +56,9 @@ const Users = () => {
 		} else if (modalName === "update_user") {
 			setUserDetail(user)
 			setUpdateUserModal(true);
+		}
+		else if (modalName === "verify_user_request") {
+			setVerifyUserReqestModal(true);
 		}
 		else {
 			setUserDetail({})
@@ -64,6 +70,7 @@ const Users = () => {
 		setUserDetailModal(false);
 		setCreateUserModal(false);
 		setUpdateUserModal(false)
+		setVerifyUserReqestModal(false)
 		setUserDetail({})
 		getUsers()
 	}
@@ -103,8 +110,11 @@ const Users = () => {
 			]
 		});
 
-	})
+		
+		  
 
+	})
+    
 	useEffect(() => {
 		getUsers();
 	}, []);
@@ -189,6 +199,9 @@ const Users = () => {
 																	<CDropdownItem onClick={() => deleteUser(user.id)}>
 																		<CIcon size='lg' icon={cilTrash} className='mx-2' /> Delete
 																	</CDropdownItem>
+																	<CDropdownItem onClick={() => openModal("verify_user_request", {})}>
+																		<CIcon size='lg' icon={cilUser} className='mx-2' /> Approve Request
+																	</CDropdownItem>
 
 																</>
 																: null
@@ -217,6 +230,7 @@ const Users = () => {
 			<UserDetails modal={userDetailmodal} user={userDetail} closeModal={closeModal} />
 			<CreateUser modal={createUserModal} user={userDetail} closeModal={closeModal} />
 			<UpdateUser modal={updateUserModal} user={userDetail} closeModal={closeModal} />
+			<VerifyUserRequest modal={verifyUserReqestModal} closeModal={closeModal} />
 		</CRow>
 	);
 };
