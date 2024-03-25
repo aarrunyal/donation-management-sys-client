@@ -148,7 +148,7 @@ const Donation = () => {
 	};
 
 	const toogleVerifyCampaignModal = () => {
-		if (verifyCampaignModal) {
+		if (modal) {
 			setVerifyCampaignModal(false);
 		} else {
 			setVerifyCampaignModal(true);
