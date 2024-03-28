@@ -7,6 +7,7 @@ import {
 	CCardBody,
 	CCardFooter,
 	CCardHeader,
+	CCardTitle,
 	CCol,
 	CProgress,
 	CRow,
@@ -58,13 +59,20 @@ import RequestAsOrganiser from 'src/components/dashboard/RequestAsOrganiser';
 import DonationCard from 'src/components/donation/DonationCard';
 
 import DonationService from 'src/services/DonationService';
+import DonationPaymentService from 'src/services/DonationPaymentService';
+import DonationHistory from 'src/components/dashboard/DonationHistory';
+import { toast } from 'react-toastify';
 
 const Dashboard = () => {
 	const navigate = useNavigate();
 
 	const donationService = new DonationService();
 
+	const donationPaymentService = new DonationPaymentService();
+
 	const [donations, setDonations] = useState([]);
+
+	const [donationHistories, setDonationHistories] = useState([]);
 
 	const [organiserModal, setOrganiserModal] = useState(false);
 
@@ -80,6 +88,7 @@ const Dashboard = () => {
 
 	const naviageIfNotLoggedIn = () => {
 		getCampaigns();
+		getDonationHistories();
 		return !isLoggedIn() ? navigate('/login') : null;
 	};
 
@@ -89,25 +98,62 @@ const Dashboard = () => {
 		});
 	};
 
+	const getDonationHistories = () => {
+		donationPaymentService
+			.byUser(5)
+			.then((response) => {
+				setDonationHistories(response.data);
+			})
+			.catch((error) => {
+				toast.error('Something went wrong !!!');
+			});
+	};
+
+
+
 	useEffect(() => {
 		naviageIfNotLoggedIn();
 	}, []);
 
 	return (
 		<>
+
+		
+
 			{donations.length > 0 ? (
 				<CCard className="mb-4">
 					<CCardBody>
 						<CRow>
-							{donations.map((dontaion, index ) => {
+							{donations.map((dontaion, i) => {
 								return (
 									<>
-										<CCol md={3}>
-											<DonationCard donation={dontaion} />
+										<CCol md={3} key={dontaion.id}>
+											<DonationCard  donation={dontaion} />
 										</CCol>
 									</>
 								);
 							})}
+						</CRow>
+					</CCardBody>
+				</CCard>
+			) : null}
+
+			{}
+
+			{donationHistories.length > 0 ? (
+				<CCard className="mb-4">
+					<CCardTitle className="m-2">Donation History</CCardTitle>
+					<CCardBody>
+						<CRow>
+							<CCol md={4}>
+								{donationHistories.map((history, index) => {
+									return (
+										<div key={history.id}>
+											<DonationHistory  history={history} />
+										</div>
+									);
+								})}
+							</CCol>
 						</CRow>
 					</CCardBody>
 				</CCard>

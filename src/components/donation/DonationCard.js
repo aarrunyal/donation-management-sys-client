@@ -1,8 +1,16 @@
 import React from 'react';
 import ProgressBar from '../elements/ProgressBar';
 import Helper from 'src/services/Helper';
+import { useNavigate } from 'react-router-dom';
+
 const DonationCard = ({ donation }) => {
 	const helper = new Helper();
+
+	const navigate = useNavigate();
+
+	const redirectToDetailPage = (id) => {
+		navigate(`/donate/${id}`);
+	};
 
 	return (
 		<>
@@ -33,13 +41,24 @@ const DonationCard = ({ donation }) => {
 
 						<ProgressBar
 							progressBarHeight={15}
-							collected={25}
-							needToCollected={75}
+							collected={helper.calculateCollected(
+								donation.total_collected,
+								donation.expected_collection
+							)}
+							needToCollected={helper.calculateToBeCollected(
+								donation.total_collected,
+								donation.expected_collection
+							)}
 						/>
 					</div>
 
 					<div className="text-center mt-2">
-						<button className="btn donate_btn">Donate</button>
+						<button
+							onClick={() => redirectToDetailPage(donation.id)}
+							className="btn btn-info donate_btn"
+						>
+							Donate
+						</button>
 					</div>
 				</div>
 			</div>

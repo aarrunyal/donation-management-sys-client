@@ -37,7 +37,6 @@ const Stripe = ({ payment }) => {
 
 		const res = await donationPaymentService.createPaymentIntent(payment);
 
-		console.log(res);
 		const clientSecret = await res.data.secret;
 		const checkoutToken = await res.data.checkout_token;
 		localStorage.setItem("ct",checkoutToken)

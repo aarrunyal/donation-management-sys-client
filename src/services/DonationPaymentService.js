@@ -14,6 +14,11 @@ export default class DonationPaymentService extends HttpUrlConfigService {
 		return await axios.get(url, this.header);
 	}
 
+	async byUser(size) {
+		let url = `${this.apiUrl}/by-user?size=${size?size:0}`
+		return await axios.get(url, this.header);
+	}
+
 	async get(id) {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.get(url, this.header);

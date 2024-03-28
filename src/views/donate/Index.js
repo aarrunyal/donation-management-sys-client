@@ -6,6 +6,7 @@ import Parser from 'html-react-parser';
 import Toasts from 'src/components/toast/Toast';
 import Payment from 'src/components/donate/Payment';
 import { toast } from 'react-toastify';
+import ProgressBar from 'src/components/elements/ProgressBar';
 
 const Donate = () => {
 	const donationService = new DonationService();
@@ -89,28 +90,17 @@ const Donate = () => {
 							<div className="card-body">
 								<div className="row mb-2  border-bottom pb-2">
 									<div className="col-12 text-center">
-										<div className="progress " style={{ height: '25px' }}>
-											<div
-												className="progress-bar bg-success"
-												role="progressbar"
-												style={{ width: '35%' }}
-												aria-valuenow="65"
-												aria-valuemin="0"
-												aria-valuemax="100"
-											>
-												<strong>25%</strong>
-											</div>
-											<div
-												className="progress-bar bg-info"
-												role="progressbar"
-												style={{ width: '65%' }}
-												aria-valuenow="35"
-												aria-valuemin="0"
-												aria-valuemax="100"
-											>
-												<strong>25%</strong>
-											</div>
-										</div>
+										<ProgressBar
+											progressBarHeight={25}
+											collected={helper.calculateCollected(
+												state.total_collected,
+												state.expected_collection
+											)}
+											needToCollected={helper.calculateToBeCollected(
+												state.total_collected,
+												state.expected_collection
+											)}
+										/>
 									</div>
 								</div>
 								<div className="row">
