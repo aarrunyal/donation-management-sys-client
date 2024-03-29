@@ -77,7 +77,6 @@ const Login = () => {
 					);
 					localStorage.setItem('token', response.data.token);
 					setTimeout(() => {
-						getLoggedInUser()
 						navigate('/dashboard');
 					}, 2000);
 				})

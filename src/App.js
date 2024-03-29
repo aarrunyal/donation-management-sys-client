@@ -1,17 +1,18 @@
-import React, { Component, Suspense } from 'react';
+import React, { Component, Suspense, useEffect } from 'react';
 import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import './scss/style.scss';
 import { isLoggedIn } from './helpers/IsLoggedIn';
 import { Provider } from 'react-redux';
-import configureStore from './store/Store';
+import {store} from './store/Store';
 
-const store = configureStore();
+
 
 const loading = (
 	<div className="pt-3 text-center">
 		<div className="sk-spinner sk-spinner-pulse"></div>
 	</div>
 );
+
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'));
@@ -27,7 +28,7 @@ class App extends Component {
 		return (
 			<HashRouter>
 				<Suspense fallback={loading}>
-					<Provider store={store}>
+					<Provider store={store()}>
 						<Routes>
 							<Route
 								exact

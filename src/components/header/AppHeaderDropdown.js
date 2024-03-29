@@ -15,9 +15,14 @@ import CIcon from '@coreui/icons-react';
 import avatar from './../../assets/images/avatars/avatar.png';
 import AuthService from 'src/services/AuthService';
 import Toasts from '../toast/Toast';
+import { useSelector } from 'react-redux';
+import Helper from 'src/services/Helper';
 
 const AppHeaderDropdown = () => {
+	const helper = new Helper();
 	const authService = new AuthService();
+
+	const user = useSelector((state) => state.user);
 
 	const childRef = useRef();
 
@@ -33,7 +38,7 @@ const AppHeaderDropdown = () => {
 					'User logged out successfully !!!'
 				);
 				setTimeout(() => {
-					window.location.href ="/"
+					window.location.href = '/';
 				}, 2000);
 			})
 			.catch((error) => {
@@ -50,7 +55,10 @@ const AppHeaderDropdown = () => {
 				<CDropdownHeader className="bg-light fw-semibold py-2">
 					User name goes here
 				</CDropdownHeader>
-
+				<CDropdownItem>
+					Hello, <strong>{helper.ucfirst(user.first_name)}</strong>
+					<CBadge color="warning" className="ms-2"></CBadge>
+				</CDropdownItem>
 				<CDropdownItem onClick={logout}>
 					<CIcon icon={cilUser} className="me-2" />
 					Logout

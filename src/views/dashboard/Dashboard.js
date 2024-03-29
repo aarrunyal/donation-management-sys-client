@@ -2,57 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-	CAvatar,
+	CButton,
 	CCard,
 	CCardBody,
-	CCardFooter,
-	CCardHeader,
 	CCardTitle,
 	CCol,
-	CProgress,
 	CRow,
-	CTable,
-	CTableBody,
-	CTableDataCell,
-	CTableHead,
-	CTableHeaderCell,
-	CTableRow,
 } from '@coreui/react';
-import { CChartLine } from '@coreui/react-chartjs';
-import { getStyle, hexToRgba } from '@coreui/utils';
-import CIcon from '@coreui/icons-react';
-import {
-	cibCcAmex,
-	cibCcApplePay,
-	cibCcMastercard,
-	cibCcPaypal,
-	cibCcStripe,
-	cibCcVisa,
-	cibGoogle,
-	cibFacebook,
-	cibLinkedin,
-	cifBr,
-	cifEs,
-	cifFr,
-	cifIn,
-	cifPl,
-	cifUs,
-	cibTwitter,
-	cilCloudDownload,
-	cilPeople,
-	cilUser,
-	cilUserFemale,
-} from '@coreui/icons';
-
-import avatar1 from 'src/assets/images/avatars/1.jpg';
-import avatar2 from 'src/assets/images/avatars/2.jpg';
-import avatar3 from 'src/assets/images/avatars/3.jpg';
-import avatar4 from 'src/assets/images/avatars/4.jpg';
-import avatar5 from 'src/assets/images/avatars/5.jpg';
-import avatar6 from 'src/assets/images/avatars/6.jpg';
 
 import WidgetsBrand from '../widgets/WidgetsBrand';
-import WidgetsDropdown from '../widgets/WidgetsDropdown';
+
 import { isLoggedIn } from 'src/helpers/IsLoggedIn';
 
 import RequestAsOrganiser from 'src/components/dashboard/RequestAsOrganiser';
@@ -109,57 +68,76 @@ const Dashboard = () => {
 			});
 	};
 
-
-
 	useEffect(() => {
 		naviageIfNotLoggedIn();
 	}, []);
 
 	return (
 		<>
-
-		
+			<CCard className="mb-2">
+				<CCardBody>
+					<div className="d-flex flex-column flex-lg-row justify-content-between align-items-center     alert alert-info">
+						<div>
+							<span className="flex-item">
+								If you wish to become an organiser and raise fund for others.
+							</span>
+						</div>
+						<div>
+							<CButton
+								onClick={openOrganiserModal}
+								className="flex-item btn btn-info text-light"
+							>
+								Become a Organiser
+							</CButton>
+						</div>
+					</div>
+				</CCardBody>
+			</CCard>
 
 			{donations.length > 0 ? (
-				<CCard className="mb-4">
-					<CCardBody>
-						<CRow>
-							{donations.map((dontaion, i) => {
-								return (
-									<>
-										<CCol md={3} key={dontaion.id}>
-											<DonationCard  donation={dontaion} />
-										</CCol>
-									</>
-								);
-							})}
-						</CRow>
-					</CCardBody>
-				</CCard>
+				<div className="d-flex">
+					<CCard>
+						<CCardBody>
+							<div className="d-flex flex-column flex-md-row justify-content-evenly">
+								{donations.map((dontaion, i) => {
+									return (
+										<>
+											<DonationCard donation={dontaion} />
+										</>
+									);
+								})}
+							</div>
+						</CCardBody>
+					</CCard>
+				</div>
 			) : null}
 
 			{}
 
 			{donationHistories.length > 0 ? (
-				<CCard className="mb-4">
-					<CCardTitle className="m-2">Donation History</CCardTitle>
-					<CCardBody>
-						<CRow>
-							<CCol md={4}>
+				<div className="d-flex mt-2">
+					<CCard className="mb-4">
+						<CCardTitle className="m-2">Donation History</CCardTitle>
+						<CCardBody>
+							<div className="d-flex  justify-content-evenly">
 								{donationHistories.map((history, index) => {
 									return (
 										<div key={history.id}>
-											<DonationHistory  history={history} />
+											<DonationHistory history={history} />
 										</div>
 									);
 								})}
-							</CCol>
-						</CRow>
-					</CCardBody>
-				</CCard>
+							</div>
+						</CCardBody>
+					</CCard>
+				</div>
 			) : null}
 
 			<WidgetsBrand withCharts />
+			<RequestAsOrganiser
+				modal={organiserModal}
+				closeModal={closeOrganiserModal}
+			/>
 		</>
 	);
 };

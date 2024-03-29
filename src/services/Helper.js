@@ -192,4 +192,9 @@ export default class Helper {
 		}
 		return Math.round(100 - percentage).toFixed(2);
 	};
+
+	ucfirst = (value)=>{
+		if(!value) return 
+		return value[0].toUpperCase() + value.slice(1);
+	}
 }

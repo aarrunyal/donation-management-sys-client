@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 export default (state = [], action) => {
 	switch (action.type) {
 		case actionTypes.CREATE_USER:
-			return [...state, Object.assign({}, action.user)];
+			return Object.assign({}, action.user);
 		case actionTypes.REMOVE_USER:
 			return (state = {});
 		default:

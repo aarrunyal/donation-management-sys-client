@@ -14,9 +14,8 @@ const DonationCard = ({ donation }) => {
 
 	return (
 		<>
-			<div className=" d-flex justify-content-center align-items-center">
-				<div className="product_card p-2">
-					<div className="d-flex flex-column t align-items-center ">
+				<div className="product_card p-2 mt-2">
+					<div className="d-flex flex-column align-items-center ">
 						<div className="">
 							<img
 								src={helper.buildImagePath(
@@ -52,7 +51,7 @@ const DonationCard = ({ donation }) => {
 						/>
 					</div>
 
-					<div className="text-center mt-2">
+					<div className=" mt-2">
 						<button
 							onClick={() => redirectToDetailPage(donation.id)}
 							className="btn btn-info donate_btn"
@@ -61,7 +60,7 @@ const DonationCard = ({ donation }) => {
 						</button>
 					</div>
 				</div>
-			</div>
+			
 		</>
 	);
 };
