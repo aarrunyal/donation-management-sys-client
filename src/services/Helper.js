@@ -1,5 +1,7 @@
 import noImage from '../assets/images/no_image.jpeg';
+// import { useSelector } from 'react-redux';
 export default class Helper {
+
 	passwordRegex =
 		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,14}$/;
 
@@ -193,8 +195,10 @@ export default class Helper {
 		return Math.round(100 - percentage).toFixed(2);
 	};
 
-	ucfirst = (value)=>{
-		if(!value) return 
+	ucfirst = (value) => {
+		if (!value) return;
 		return value[0].toUpperCase() + value.slice(1);
-	}
+	};
+
+	controlAccess() {}
 }

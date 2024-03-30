@@ -134,9 +134,7 @@ const Users = () => {
 						<strong>User</strong>
 					</CCardHeader>
 					<CCardBody>
-						<CRow>
-
-						</CRow>
+						
 						<CTable>
 							<CTableHead color="dark">
 								<CTableRow>

@@ -6,7 +6,6 @@ export const isLoggedIn = () => {
   if (token !== null) {
     try {
       const isMyTokenExpired = isExpired(token)
-      console.log(isMyTokenExpired)
       // Check if token expiry
       if (!isMyTokenExpired) {
         return true
