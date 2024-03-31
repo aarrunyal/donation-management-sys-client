@@ -67,7 +67,7 @@ const UserProfile = () => {
 	const validateForm = () => {
 		let newErrors = {};
 		let flag = new Set();
-		let exclude = ['address_line_2'];
+		let exclude = ['address_line_2', 'alternative_contact_no'];
 		for (let key in formData) {
 			if (exclude.includes(key)) {
 				newErrors[key] = false;
@@ -85,6 +85,7 @@ const UserProfile = () => {
 				flag.add(false);
 			}
 		}
+		console.log(newErrors)
 
 		if (flag.has(true)) {
 			setErrors(newErrors);
@@ -123,37 +124,19 @@ const UserProfile = () => {
 			});
 	};
 
-	const getUserAddress = (id) => {
-		userAddressService
-			.getByUserId(id)
-			.then((response) => {
-				toast.success(helper.SUCCESS_MESSAGE);
-			})
-			.catch((error) => {
-				toast.error(helper.ERROR_MESSAGE);
-			});
-	};
-
-	const getUserSetting = (id) => {
-		userSettingService
-			.getByUserId(id)
-			.then((response) => {
-				toast.success(helper.SUCCESS_MESSAGE);
-			})
-			.catch((error) => {
-				toast.error(helper.ERROR_MESSAGE);
-			});
-	};
+	const userDetails = async (id)=>{
+		const userAddress =  await userAddressService.getByUserId(id)
+		const userSetting =  await userSettingService.getByUserId(id)
+		const obj = {...userAddress.data, ...userSetting.data}
+		setFormData(obj)
+		
+	}
 
 	useEffect(() => {
 		if(params.id){
-			// setUserId(params.id)
-			getUserAddress(params.id);
-			getUserSetting(params.id);
+			userDetails(params.id)
 		}else{
-			// setUserId(selector.id)
-			getUserAddress(selector.id);
-			getUserSetting(selector.id);
+			userDetails(selector.id)
 		}
 	}, []);
 
@@ -171,19 +154,19 @@ const UserProfile = () => {
 									<div className="mb-3">
 										<CFormInput
 											type="tel"
-											name="contact_number"
+											name="contact_no"
 											id="validationDefault05"
 											label="Contact Number"
 											placeholder="Enter contact number"
-											value={formData.contact_number}
+											value={formData.contact_no}
 											onChange={handleInputChange}
 											style={{
-												border: errors.contact_number ? '1px solid red' : null,
+												border: errors.contact_no ? '1px solid red' : null,
 											}}
 										/>
 										{errors.contact_number && (
 											<div className="text-danger">
-												Contact Number is required
+												Contact Number is required and should be valid
 											</div>
 										)}
 									</div>
