@@ -41,6 +41,7 @@ const _nav = [
 		icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
 		access:["all"]
 	},
+	
 	{
 		component: CNavItem,
 		name: 'User',

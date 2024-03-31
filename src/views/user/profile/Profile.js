@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	CButton,
 	CCard,
@@ -11,8 +11,14 @@ import {
 	CCardBody,
 	CCardFooter,
 } from '@coreui/react';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Helper from 'src/services/Helper';
+import validationHelper from 'src/services/ValidationHelper';
+import UserService from 'src/services/UserService';
+import UserAddressService from 'src/services/UserAddressService';
+import UserSettingService from 'src/services/UserSettingService';
+import { useSelector } from 'react-redux';
 
 const provinces = [
 	'Alberta',
@@ -30,16 +36,25 @@ const provinces = [
 const genders = ['Male', 'Female', 'Other'];
 
 const UserProfile = () => {
+	const navigate = useNavigate();
+	const selector = useSelector((state)=>state.user)
+	const params = useParams()
 
-    const navigate = useNavigate();
-    
+	const helper = new Helper();
+
+	const userService = new UserService();
+	const userAddressService = new UserAddressService();
+	const userSettingService = new UserSettingService();
+
 	const [formData, setFormData] = useState({
-		contactNumber: '',
-		address: '',
-		province: '',
-		zipCode: '',
-		dob: '',
-		gender: '',
+		contact_number: null,
+		address_line_1: null,
+		city: null,
+		state: null,
+		postal_code: null,
+		dob: null,
+		country: null,
+		gender: null,
 	});
 
 	const [errors, setErrors] = useState({});
@@ -49,20 +64,98 @@ const UserProfile = () => {
 		setFormData({ ...formData, [name]: value });
 	};
 
+	const validateForm = () => {
+		let newErrors = {};
+		let flag = new Set();
+		let exclude = ['address_line_2'];
+		for (let key in formData) {
+			if (exclude.includes(key)) {
+				newErrors[key] = false;
+			} else if (!new validationHelper().validateEmpty(formData[key])) {
+				newErrors[key] = true;
+				flag.add(true);
+			} else if (
+				key === 'contact_number' &&
+				!new validationHelper().validateContactNo(formData[key])
+			) {
+				newErrors[key] = true;
+				flag.add(true);
+			} else {
+				newErrors[key] = false;
+				flag.add(false);
+			}
+		}
+
+		if (flag.has(true)) {
+			setErrors(newErrors);
+			resetValidationMessage();
+			return false;
+		}
+		return true;
+	};
+
+	const resetValidationMessage = () => {
+		setTimeout(() => {
+			setErrors({});
+		}, 3000);
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// Perform validation here
-		const newErrors = {};
-		// Validation rules...
 
-		if (Object.keys(newErrors).length === 0) {
-			// Form is valid, submit data or perform further actions
-			console.log('Form submitted:', formData);
+		if (!validateForm()) {
+			toast.error(new validationHelper().VALIDATION_ERROR);
+			toast.warning(new validationHelper().VALIDATION_EMPTY_ERROR);
 		} else {
-			// Form is invalid, set errors
-			setErrors(newErrors);
+			createOrUpdate();
 		}
 	};
+
+	const createOrUpdate = () => {
+		userService
+			.createOrUpdate(formData)
+			.then((response) => {
+				toast.success(helper.SUCCESS_MESSAGE);
+			})
+			.catch((error) => {
+				toast.error(helper.ERROR_MESSAGE);
+			});
+	};
+
+	const getUserAddress = (id) => {
+		userAddressService
+			.getByUserId(id)
+			.then((response) => {
+				toast.success(helper.SUCCESS_MESSAGE);
+			})
+			.catch((error) => {
+				toast.error(helper.ERROR_MESSAGE);
+			});
+	};
+
+	const getUserSetting = (id) => {
+		userSettingService
+			.getByUserId(id)
+			.then((response) => {
+				toast.success(helper.SUCCESS_MESSAGE);
+			})
+			.catch((error) => {
+				toast.error(helper.ERROR_MESSAGE);
+			});
+	};
+
+	useEffect(() => {
+		if(params.id){
+			// setUserId(params.id)
+			getUserAddress(params.id);
+			getUserSetting(params.id);
+		}else{
+			// setUserId(selector.id)
+			getUserAddress(selector.id);
+			getUserSetting(selector.id);
+		}
+	}, []);
 
 	return (
 		<CRow>
@@ -78,16 +171,20 @@ const UserProfile = () => {
 									<div className="mb-3">
 										<CFormInput
 											type="tel"
-											name="contactNumber"
+											name="contact_number"
 											id="validationDefault05"
 											label="Contact Number"
 											placeholder="Enter contact number"
-											value={formData.contactNumber}
+											value={formData.contact_number}
 											onChange={handleInputChange}
-											required
+											style={{
+												border: errors.contact_number ? '1px solid red' : null,
+											}}
 										/>
-										{errors.contactNumber && (
-											<div className="text-danger">{errors.contactNumber}</div>
+										{errors.contact_number && (
+											<div className="text-danger">
+												Contact Number is required
+											</div>
 										)}
 									</div>
 								</CCol>
@@ -95,30 +192,82 @@ const UserProfile = () => {
 									<div className="mb-3">
 										<CFormInput
 											type="text"
-											name="address"
-											id="validationDefault06"
-											label="Address"
+											name="address_line_1"
+											label="Street"
 											placeholder="Enter address"
-											value={formData.address}
+											value={formData.address_line_1}
 											onChange={handleInputChange}
-											required
+											style={{
+												border: errors.address_line_1 ? '1px solid red' : null,
+											}}
 										/>
-										{errors.address && (
-											<div className="text-danger">{errors.address}</div>
+										{errors.address_line_1 && (
+											<div className="text-danger">Street is required</div>
+										)}
+									</div>
+								</CCol>
+
+								<CCol sm={4}>
+									<div className="mb-3">
+										<CFormInput
+											type="text"
+											name="address_line_2"
+											label="Unit or Apartment Number"
+											placeholder="Unit or Apartment Number"
+											value={formData.address_line_2}
+											onChange={handleInputChange}
+										/>
+									</div>
+								</CCol>
+								<CCol sm={4}>
+									<div className="mb-3">
+										<CFormInput
+											type="text"
+											name="city"
+											label="City"
+											placeholder="Enter City"
+											value={formData.city}
+											onChange={handleInputChange}
+											style={{
+												border: errors.city ? '1px solid red' : null,
+											}}
+										/>
+										{errors.city && (
+											<div className="text-danger">City is required</div>
+										)}
+									</div>
+								</CCol>
+								<CCol sm={4}>
+									<div className="mb-3">
+										<CFormInput
+											type="text"
+											name="country"
+											label="Country"
+											placeholder="Enter Country"
+											value={formData.country}
+											onChange={handleInputChange}
+											style={{
+												border: errors.country ? '1px solid red' : null,
+											}}
+										/>
+										{errors.city && (
+											<div className="text-danger">Country is required</div>
 										)}
 									</div>
 								</CCol>
 								<CCol sm={4}>
 									<div className="mb-3">
 										<CFormSelect
-											name="province"
+											name="state"
 											id="validationServer07"
-											label="Province"
-											placeholder="Select province"
-											value={formData.province}
+											label="State"
+											placeholder="Select State"
+											value={formData.state}
 											onChange={handleInputChange}
-											feedback="Please select your province."
-											required
+											feedback="Please select your state."
+											style={{
+												border: errors.state ? '1px solid red' : null,
+											}}
 										>
 											<option value="">Choose...</option>
 											{provinces.map((province, index) => (
@@ -127,27 +276,28 @@ const UserProfile = () => {
 												</option>
 											))}
 										</CFormSelect>
-										{errors.province && (
-											<div className="text-danger">{errors.province}</div>
+										{errors.state && (
+											<div className="text-danger">State is required</div>
 										)}
 									</div>
 								</CCol>
-							</CRow>
-							<CRow>
+
 								<CCol sm={4}>
 									<div className="mb-3">
 										<CFormInput
 											type="text"
-											name="zipCode"
+											name="postal_code"
 											id="validationDefault08"
 											label="Zip Code"
-											placeholder="Enter zip code"
-											value={formData.zipCode}
+											placeholder="Enter Postal Code"
+											value={formData.postal_code}
 											onChange={handleInputChange}
-											required
+											style={{
+												border: errors.postal_code ? '1px solid red' : null,
+											}}
 										/>
-										{errors.zipCode && (
-											<div className="text-danger">{errors.zipCode}</div>
+										{errors.postal_code && (
+											<div className="text-danger">Postal code is required</div>
 										)}
 									</div>
 								</CCol>
@@ -161,7 +311,9 @@ const UserProfile = () => {
 											placeholder="Select date of birth"
 											value={formData.dob}
 											onChange={handleInputChange}
-											required
+											style={{
+												border: errors.postal_code ? '1px solid red' : null,
+											}}
 										/>
 										{errors.dob && (
 											<div className="text-danger">{errors.dob}</div>
@@ -178,7 +330,9 @@ const UserProfile = () => {
 											value={formData.gender}
 											onChange={handleInputChange}
 											feedback="Please select your gender."
-											required
+											style={{
+												border: errors.gender ? '1px solid red' : null,
+											}}
 										>
 											<option value="">Choose...</option>
 											{genders.map((gender, index) => (
@@ -188,7 +342,7 @@ const UserProfile = () => {
 											))}
 										</CFormSelect>
 										{errors.gender && (
-											<div className="text-danger">{errors.gender}</div>
+											<div className="text-danger">Gender is required</div>
 										)}
 									</div>
 								</CCol>
@@ -198,8 +352,11 @@ const UserProfile = () => {
 							<CCol sm={12}>
 								<div className="my-2 text-center">
 									<CButton
-                                    onClick={()=>navigate("/user")}
-                                    color="danger" className="text-light mx-2" type="submit">
+										onClick={() => navigate('/user')}
+										color="danger"
+										className="text-light mx-2"
+										type="submit"
+									>
 										Cancel
 									</CButton>
 									<CButton

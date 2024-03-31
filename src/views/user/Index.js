@@ -21,7 +21,20 @@ import {
 import UserService from 'src/services/UserService';
 
 import CIcon from '@coreui/icons-react';
-import { cibCircle, cibSamsung, cilAlignCenter, cilCheckAlt, cilCheckCircle, cilCircle, cilPencil, cilPlus, cilTrash, cilUser, cilUserX, cilVerticalAlignCenter } from '@coreui/icons';
+import {
+	cibCircle,
+	cibSamsung,
+	cilAlignCenter,
+	cilCheckAlt,
+	cilCheckCircle,
+	cilCircle,
+	cilPencil,
+	cilPlus,
+	cilTrash,
+	cilUser,
+	cilUserX,
+	cilVerticalAlignCenter,
+} from '@coreui/icons';
 import UserDetails from 'src/components/user/UserDetails';
 import Helper from 'src/services/Helper';
 import CreateUser from 'src/components/user/CreateUser';
@@ -30,10 +43,13 @@ import UpdateUser from 'src/components/user/UpdateUser';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import VerifyUserRequest from 'src/components/user/VerifyUserRequest';
+import { useNavigate } from 'react-router-dom';
 
 const Users = () => {
 	const helper = new Helper();
 	const userService = new UserService();
+
+	const navigate = useNavigate();
 
 	const childRef = useRef();
 
@@ -45,35 +61,33 @@ const Users = () => {
 
 	const [updateUserModal, setUpdateUserModal] = useState(false);
 
-	const [verifyUserReqestModal, setVerifyUserReqestModal] = useState(false)
+	const [verifyUserReqestModal, setVerifyUserReqestModal] = useState(false);
 
-	const [userDetail, setUserDetail] = useState({})
+	const [userDetail, setUserDetail] = useState({});
 
 	const openModal = (modalName, user = {}) => {
-		if (modalName === "user_detail") {
-			setUserDetail(user)
+		if (modalName === 'user_detail') {
+			setUserDetail(user);
 			setUserDetailModal(true);
-		} else if (modalName === "update_user") {
-			setUserDetail(user)
+		} else if (modalName === 'update_user') {
+			setUserDetail(user);
 			setUpdateUserModal(true);
-		}
-		else if (modalName === "verify_user_request") {
+		} else if (modalName === 'verify_user_request') {
 			setVerifyUserReqestModal(true);
-		}
-		else {
-			setUserDetail({})
+		} else {
+			setUserDetail({});
 			setCreateUserModal(true);
 		}
-	}
+	};
 
 	const closeModal = (modalName) => {
 		setUserDetailModal(false);
 		setCreateUserModal(false);
-		setUpdateUserModal(false)
-		setVerifyUserReqestModal(false)
-		setUserDetail({})
-		getUsers()
-	}
+		setUpdateUserModal(false);
+		setVerifyUserReqestModal(false);
+		setUserDetail({});
+		getUsers();
+	};
 
 	const getUsers = () => {
 		userService
@@ -86,8 +100,7 @@ const Users = () => {
 			});
 	};
 
-
-	const deleteUser = ((id) => {
+	const deleteUser = (id) => {
 		confirmAlert({
 			title: 'Deleting users detail',
 			message: 'Are you sure?',
@@ -95,46 +108,47 @@ const Users = () => {
 				{
 					label: 'Yes',
 					onClick: () => {
-						userService.delete(id).then(res => {
-							childRef.current.showToast('success', res.data.data);
-							getUsers()
-						}).catch(err => {
-							childRef.current.showToast('error', err.response.data.message);
-						})
-					}
+						userService
+							.delete(id)
+							.then((res) => {
+								childRef.current.showToast('success', res.data.data);
+								getUsers();
+							})
+							.catch((err) => {
+								childRef.current.showToast('error', err.response.data.message);
+							});
+					},
 				},
 				{
 					label: 'No',
-					onClick: () => getUsers()
-				}
-			]
+					onClick: () => getUsers(),
+				},
+			],
 		});
+	};
 
-		
-		  
-
-	})
-    
 	useEffect(() => {
 		getUsers();
 	}, []);
 
 	return (
 		<CRow>
-			<CCol xs={12} className='mb-2 text-end'>
-				<CButton color="info" className='text-light' onClick={() => openModal("create_user", {})}>
-					<CIcon size='sm' className='mx-2' icon={cilPlus} />
+			<CCol xs={12} className="mb-2 text-end">
+				<CButton
+					color="info"
+					className="text-light"
+					onClick={() => openModal('create_user', {})}
+				>
+					<CIcon size="sm" className="mx-2" icon={cilPlus} />
 					Add User
 				</CButton>
 			</CCol>
 			<CCol xs={12}>
 				<CCard className="mb-4">
-
 					<CCardHeader>
 						<strong>User</strong>
 					</CCardHeader>
 					<CCardBody>
-						
 						<CTable>
 							<CTableHead color="dark">
 								<CTableRow>
@@ -158,56 +172,89 @@ const Users = () => {
 												{index + 1}
 											</CTableHeaderCell>
 											<CTableDataCell>
-												{`${user.first_name} ${user.last_name}`}</CTableDataCell>
+												{`${user.first_name} ${user.last_name}`}
+											</CTableDataCell>
 											<CTableDataCell>{user.email}</CTableDataCell>
 											<CTableDataCell>
-												<CBadge color={helper.badgeColor(user.role)} >
+												<CBadge color={helper.badgeColor(user.role)}>
 													{user.role}
 												</CBadge>
 											</CTableDataCell>
 											<CTableDataCell>
-												{
-													user.role != "ADMIN" ?
-														<>
-															<CBadge color={helper.badgeColor(user.status)}>
-																{helper.activeText(user.status)}
-															</CBadge>
-															<br />
-															<CBadge color={helper.badgeColor(user.verified)}>
-																{helper.verifiedText(user.verified)}
-															</CBadge>
-														</>
-														: null
-												}
+												{user.role != 'ADMIN' ? (
+													<>
+														<CBadge color={helper.badgeColor(user.status)}>
+															{helper.activeText(user.status)}
+														</CBadge>
+														<br />
+														<CBadge color={helper.badgeColor(user.verified)}>
+															{helper.verifiedText(user.verified)}
+														</CBadge>
+													</>
+												) : null}
 											</CTableDataCell>
 											<CTableDataCell>
-												<CIcon onClick={() => openModal("user_detail", user)} size='lg' icon={cilAlignCenter} className='m-2' />
+												<CIcon
+													onClick={() => openModal('user_detail', user)}
+													size="lg"
+													icon={cilAlignCenter}
+													className="m-2"
+												/>
 											</CTableDataCell>
 											<CTableDataCell>
 												<CDropdown>
 													<CDropdownToggle color="light"></CDropdownToggle>
 													<CDropdownMenu>
-														{
-															user.role != "ADMIN"
-																?
-																<>
-																	<CDropdownItem onClick={() => openModal("update_user", user)}>
-																		<CIcon size='lg' icon={cilPencil} className='mx-2' />Edit
-																	</CDropdownItem>
-																	<CDropdownItem onClick={() => deleteUser(user.id)}>
-																		<CIcon size='lg' icon={cilTrash} className='mx-2' /> Delete
-																	</CDropdownItem>
-																	<CDropdownItem onClick={() => openModal("verify_user_request", {})}>
-																		<CIcon size='lg' icon={cilUser} className='mx-2' /> Approve Request
-																	</CDropdownItem>
-
-																</>
-																: null
-														}
+														{user.role != 'ADMIN' ? (
+															<>
+																<CDropdownItem
+																	onClick={() => openModal('update_user', user)}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilPencil}
+																		className="mx-2"
+																	/>
+																	Edit
+																</CDropdownItem>
+																<CDropdownItem
+																	onClick={() => deleteUser(user.id)}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilTrash}
+																		className="mx-2"
+																	/>{' '}
+																	Delete
+																</CDropdownItem>
+																<CDropdownItem
+																	onClick={() =>
+																		openModal('verify_user_request', {})
+																	}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilUser}
+																		className="mx-2"
+																	/>{' '}
+																	Approve Request
+																</CDropdownItem>
+																<CDropdownItem
+																	onClick={() =>
+																		navigate(`/user-profile/${user.id}`)
+																	}
+																>
+																	<CIcon
+																		size="lg"
+																		icon={cilUser}
+																		className="mx-2"
+																	/>{' '}
+																	Update User Profile
+																</CDropdownItem>
+															</>
+														) : null}
 													</CDropdownMenu>
 												</CDropdown>
-
-
 											</CTableDataCell>
 										</CTableRow>
 									);
@@ -222,13 +269,27 @@ const Users = () => {
 						</CTable>
 					</CCardBody>
 				</CCard>
-
 			</CCol>
 			<Toasts childRef={childRef} />
-			<UserDetails modal={userDetailmodal} user={userDetail} closeModal={closeModal} />
-			<CreateUser modal={createUserModal} user={userDetail} closeModal={closeModal} />
-			<UpdateUser modal={updateUserModal} user={userDetail} closeModal={closeModal} />
-			<VerifyUserRequest modal={verifyUserReqestModal} closeModal={closeModal} />
+			<UserDetails
+				modal={userDetailmodal}
+				user={userDetail}
+				closeModal={closeModal}
+			/>
+			<CreateUser
+				modal={createUserModal}
+				user={userDetail}
+				closeModal={closeModal}
+			/>
+			<UpdateUser
+				modal={updateUserModal}
+				user={userDetail}
+				closeModal={closeModal}
+			/>
+			<VerifyUserRequest
+				modal={verifyUserReqestModal}
+				closeModal={closeModal}
+			/>
 		</CRow>
 	);
 };

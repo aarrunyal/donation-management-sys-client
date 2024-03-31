@@ -1,11 +1,15 @@
 import noImage from '../assets/images/no_image.jpeg';
 // import { useSelector } from 'react-redux';
 export default class Helper {
-
 	passwordRegex =
 		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,14}$/;
 
 	emailRegex = /\S+@\S+\.\S+/;
+
+	ERROR_MESSAGE = 'Something went wrong !!!';
+	LOADING_MESSAGE = 'Request in progress !!!';
+	SUCCESS_MESSAGE = 'Request has been processed successfully !!!';
+	WARNING_MESSAGE = 'Issue with request !!!';
 
 	badgeColor = (color) => {
 		let badge = 'info';
