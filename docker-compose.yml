@@ -10,6 +10,7 @@ services:
       - "${PORT}:${PORT}"
     networks:
       - dms_client_network
+    mem_limit: 2GB
 
 networks:
   dms_client_network:
