@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  dms_client_app:
+    build:
+      context: .
+    container_name: dms_client_app
+    image: aarrunyal/dms_client_app:latest
+    env_file: ./.env
+    ports:
+      - "${PORT}:${PORT}"
+    networks:
+      - dms_client_network
+
+networks:
+  dms_client_network:
+    name: dms_client_network
+
+volumes:
+  dms_client_db:
+    name: dms_client_db_volume
+  dms_client_cache:
+    name: dms_client_cache_volume
