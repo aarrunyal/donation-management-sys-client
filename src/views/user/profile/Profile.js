@@ -85,7 +85,6 @@ const UserProfile = () => {
 				flag.add(false);
 			}
 		}
-		console.log(newErrors)
 
 		if (flag.has(true)) {
 			setErrors(newErrors);
