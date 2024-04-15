@@ -2,16 +2,15 @@ import axios from 'axios';
 import { HttpUrlConfigService } from './HttpUrlConfigService';
 import Helper from './Helper';
 export default class UserAddressService extends HttpUrlConfigService {
-
 	constructor() {
 		super();
 		this.apiUrl = `${this.apiUrl}` + 'admin/user-address';
-		this.helper = new Helper()
+		this.helper = new Helper();
 	}
 
 	async all(filter = {}) {
 		let queryString = this.helper.generateQueryString(filter);
-		let url = this.apiUrl
+		let url = this.apiUrl;
 		// console.log(queryString)
 		// if(queryString){
 		// 	url = url + "?"+ queryString
@@ -42,4 +41,11 @@ export default class UserAddressService extends HttpUrlConfigService {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.delete(url, this.header);
 	}
+
+	async getByUserId(userId){
+        let url = `${this.apiUrl}/by/${userId}`;
+		return await axios.get(url, this.header);
+    }
+
+
 }

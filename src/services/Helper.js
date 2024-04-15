@@ -1,9 +1,15 @@
 import noImage from '../assets/images/no_image.jpeg';
+// import { useSelector } from 'react-redux';
 export default class Helper {
 	passwordRegex =
 		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,14}$/;
 
 	emailRegex = /\S+@\S+\.\S+/;
+
+	ERROR_MESSAGE = 'Something went wrong !!!';
+	LOADING_MESSAGE = 'Request in progress !!!';
+	SUCCESS_MESSAGE = 'Request has been processed successfully !!!';
+	WARNING_MESSAGE = 'Issue with request !!!';
 
 	badgeColor = (color) => {
 		let badge = 'info';
@@ -136,9 +142,6 @@ export default class Helper {
 		});
 
 	buildImagePath = (imagePath = null, imageName = null, imageType = null) => {
-		console.log(imagePath);
-		console.log(imageName);
-		console.log(imageType);
 		if (!imagePath || !imageName) return noImage;
 		if (imageType == 'thumb')
 			return `${process.env.REACT_APP_API_ENDPOINT}/${imagePath}/thumb/${imageName}`;
@@ -153,7 +156,6 @@ export default class Helper {
 	};
 
 	generateQueryString = (object = {}) => {
-		console.log(object);
 		if (Object.values(object).length <= 0) {
 			return null;
 		} else {
@@ -173,10 +175,34 @@ export default class Helper {
 		window.history.pushState({ path: updatedUrl }, '', updatedUrl);
 	};
 
-    buildUrlForBackend = (route, parameter)=>{
-        let url = `${process.env.REACT_APP_API_ENDPOINT}/${route}`
-        if(parameter)
-        url = `${url}/${parameter}`
-        return url;
-    }
+	buildUrlForBackend = (route, parameter) => {
+		let url = `${process.env.REACT_APP_API_ENDPOINT}/${route}`;
+		if (parameter) url = `${url}/${parameter}`;
+		return url;
+	};
+
+	calculateCollected = (collected, expectedCollection) => {
+		if (!collected) return 0;
+		let percentage = (collected / expectedCollection) * 100;
+		if (percentage > 100) {
+			return 100;
+		}
+		return Math.round((collected / expectedCollection) * 100).toFixed(2);
+	};
+
+	calculateToBeCollected = (collected, expectedCollection) => {
+		if (!collected) return 100;
+		let percentage = (collected / expectedCollection) * 100;
+		if (percentage > 100) {
+			return 0;
+		}
+		return Math.round(100 - percentage).toFixed(2);
+	};
+
+	ucfirst = (value) => {
+		if (!value) return;
+		return value[0].toUpperCase() + value.slice(1);
+	};
+
+	controlAccess() {}
 }

@@ -1,14 +1,21 @@
 import React from 'react';
 import ProgressBar from '../elements/ProgressBar';
 import Helper from 'src/services/Helper';
+import { useNavigate } from 'react-router-dom';
+
 const DonationCard = ({ donation }) => {
 	const helper = new Helper();
 
+	const navigate = useNavigate();
+
+	const redirectToDetailPage = (id) => {
+		navigate(`/donate/${id}`);
+	};
+
 	return (
 		<>
-			<div className=" d-flex justify-content-center align-items-center">
-				<div className="product_card p-2">
-					<div className="d-flex flex-column t align-items-center ">
+				<div className="product_card p-2 mt-2">
+					<div className="d-flex flex-column align-items-center ">
 						<div className="">
 							<img
 								src={helper.buildImagePath(
@@ -33,16 +40,27 @@ const DonationCard = ({ donation }) => {
 
 						<ProgressBar
 							progressBarHeight={15}
-							collected={25}
-							needToCollected={75}
+							collected={helper.calculateCollected(
+								donation.total_collected,
+								donation.expected_collection
+							)}
+							needToCollected={helper.calculateToBeCollected(
+								donation.total_collected,
+								donation.expected_collection
+							)}
 						/>
 					</div>
 
-					<div className="text-center mt-2">
-						<button className="btn donate_btn">Donate</button>
+					<div className=" mt-2">
+						<button
+							onClick={() => redirectToDetailPage(donation.id)}
+							className="btn btn-info donate_btn"
+						>
+							Donate
+						</button>
 					</div>
 				</div>
-			</div>
+			
 		</>
 	);
 };

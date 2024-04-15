@@ -20,6 +20,7 @@ const routes = [
 	{ path: '/form', name: 'Form', element: Form },
 	{ path: '/table', name: 'Table', element: Table },
 	{ path: '/user-profile', name: 'User Profile', element: UserProfile },
+	{ path: '/user-profile/:id', name: 'User Profile', element: UserProfile },
 	{ path: '/user', name: 'User', element: User },
 	{ path: '/donation', name: 'Donation', element: Donation },
 	{ path: '/donation-create', name: 'Create Donation', element: CreateDonation },

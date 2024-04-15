@@ -30,9 +30,6 @@ import {
 	cilPlus,
 	cilSearch,
 	cilTrash,
-	cilUser,
-	cilUserX,
-	cilVerticalAlignCenter,
 } from '@coreui/icons';
 import Helper from 'src/services/Helper';
 import Toasts from 'src/components/toast/Toast';
@@ -42,6 +39,7 @@ import DonationService from 'src/services/DonationService';
 import DonationDetail from 'src/components/donation/DonationDetail';
 import { useNavigate } from 'react-router-dom';
 import VerifyCampaign from 'src/components/donation/VerifyCampaign';
+import { toast } from 'react-toastify';
 
 const Donation = () => {
 	const helper = new Helper();
@@ -88,11 +86,11 @@ const Donation = () => {
 						donationService
 							.delete(id)
 							.then((res) => {
-								childRef.current.showToast('success', res.data.data);
+								toast.success(res.data.data);
 								getDonations();
 							})
 							.catch((err) => {
-								childRef.current.showToast('error', err.response.data.message);
+								toast.error(err.response.data.message);
 							});
 					},
 				},
@@ -121,11 +119,11 @@ const Donation = () => {
 						donationService
 							.toggleStatus(donation.id, flag)
 							.then((res) => {
-								childRef.current.showToast('success', res.data.data);
+								toast.success(res.data.data);
 								getDonations();
 							})
 							.catch((err) => {
-								childRef.current.showToast('error', err.response.data.message);
+								toast.error(err.response.data.message);
 							});
 					},
 				},
@@ -148,7 +146,7 @@ const Donation = () => {
 	};
 
 	const toogleVerifyCampaignModal = () => {
-		if (verifyCampaignModal) {
+		if (modal) {
 			setVerifyCampaignModal(false);
 		} else {
 			setVerifyCampaignModal(true);

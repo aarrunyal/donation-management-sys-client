@@ -13,6 +13,7 @@ const _nav = [
 			color: 'info',
 			text: 'NEW',
 		},
+		access:["all"]
 	},
 	{
 		component: CNavItem,
@@ -38,24 +39,29 @@ const _nav = [
 		name: 'User Profile',
 		to: '/user-profile',
 		icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
+		access:["all"]
 	},
+	
 	{
 		component: CNavItem,
 		name: 'User',
 		to: '/user',
 		icon: <CIcon icon={cilUserX} customClassName="nav-icon" />,
+		access:["admin"]
 	},
 	{
 		component: CNavItem,
 		name: 'Donation Campaign',
 		to: '/donation',
 		icon: <CIcon icon={cilHealing} customClassName="nav-icon" />,
+		access:["admin", "organiser"]
 	},
 	{
 		component: CNavItem,
 		name: 'Donation History',
 		to: '/history',
 		icon: <CIcon icon={cilHealing} customClassName="nav-icon" />,
+		access:["admin", "organiser"]
 	},
 ];
 

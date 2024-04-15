@@ -30,4 +30,9 @@ export default class UserService extends HttpUrlConfigService {
 		let url = `${this.apiUrl}/${id}`;
 		return await axios.delete(url, this.header);
 	}
+
+	async createOrUpdate(data) {
+		let url = `${this.apiUrl}/user-details/create-or-update`;
+		return await axios.post(url, data, this.header);
+	}
 }
