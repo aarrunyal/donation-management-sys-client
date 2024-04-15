@@ -14,9 +14,3 @@ services:
 networks:
   dms_client_network:
     name: dms_client_network
-
-volumes:
-  dms_client_db:
-    name: dms_client_db_volume
-  dms_client_cache:
-    name: dms_client_cache_volume
